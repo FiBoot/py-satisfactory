@@ -1,2 +1,5 @@
 # py-satisfactory
-python
+
+### Python 3.11.4
+
+### pygame 2.5.0
