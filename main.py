@@ -17,10 +17,6 @@ active_build = None
 active_connection = None
 
 
-def create_building(rel):
-    builds.append(Build(150, 80, rel))
-
-
 def collide_build(pos):
     collided = None
     for build in builds:
@@ -30,6 +26,16 @@ def collide_build(pos):
     if collided:
         collided.selected = True
     return collided
+
+# context menu callbacks
+def quit(rel, arg):
+    pygame.quit()
+
+def create_building(rel, _):
+    builds.append(Build(150, 80, rel))
+
+def delete_building(rel, build):
+    builds.remove(build)
 
 
 running = True
@@ -55,10 +61,16 @@ while running:
                     case EButtonType.RIGHT:
                         # open context menu
                         # TODO
-                        context_menu.open(event.pos, [
-                            ContextMenuItem('create build', create_building),
-                            ContextMenuItem('truc', create_building)
-                        ])
+                        build = collide_build(event.pos)
+                        if build:
+                            context_menu.open(event.pos, [
+                                ContextMenuItem('Delete build', delete_building, build),
+                            ])
+                        else:
+                            context_menu.open(event.pos, [
+                                ContextMenuItem('Create build', create_building),
+                                ContextMenuItem('Quit', quit),
+                            ])
 
             case pygame.MOUSEBUTTONUP:
                 # connection

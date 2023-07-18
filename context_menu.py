@@ -2,9 +2,10 @@ import pygame
 from enums import EContextMenu
 
 class ContextMenuItem:
-    def __init__(self, text, callback = None):
+    def __init__(self, text, callback, arg = None):
         self.text = text
         self.callback = callback
+        self.arg = arg
 
     def collide(self, pos, rel, index):
         height = index * EContextMenu.HEIGHT
@@ -34,7 +35,7 @@ class ContextMenu:
         if self.displayed:
             for index, item in enumerate(self.items):
                 if item.collide(self.pos, rel, index):
-                    item.callback(rel)
+                    item.callback(self.pos, item.arg)
 
     def draw(self, screen):
         if self.displayed:

@@ -11,7 +11,7 @@ class EContextMenu:
     FONT_COLOR = '#111111'
     WIDTH = 150
     HEIGHT = 40
-    PADDING = 10
+    PADDING = 12
 
 class EButtonType:
     LEFT = 1
