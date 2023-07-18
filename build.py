@@ -16,21 +16,20 @@ class Build:
         return f'{self.uuid} [{self.pos[0]}, {self.pos[1]}]'
 
     def move(self, rel):
-        self.pos[0] += rel[0]
-        self.pos[1] += rel[1]
+        self.pos = (self.pos[0] + rel[0], self.pos[1] + rel[1])
 
-    def draw(self, surface):
+    def draw(self, screen):
         rect = pygame.Rect(self.pos[0], self.pos[1], self.width, self.height)
         color = 'orange' if self.selected else 'purple'
-        pygame.draw.rect(surface, color, rect)
+        pygame.draw.rect(screen, color, rect)
         for connection in self.connections:
-            connection.draw(surface, self.pos)
+            connection.draw(screen, self.pos)
 
-    def collide(self, pos):
-        return pos[0] > self.pos[0] and pos[0] < self.pos[0] + self.width and pos[1] > self.pos[1] and pos[1] < self.pos[1] + self.height
+    def collide(self, rel):
+        return rel[0] > self.pos[0] and rel[0] < self.pos[0] + self.width and rel[1] > self.pos[1] and rel[1] < self.pos[1] + self.height
 
-    def collide_connection(self, pos):
-        inside_pos = [pos[0] - self.pos[0], pos[1] - self.pos[1]]
+    def collide_connection(self, rel):
+        inside_pos = [rel[0] - self.pos[0], rel[1] - self.pos[1]]
         for connection in self.connections:
             if connection.collide(inside_pos):
                 return connection
