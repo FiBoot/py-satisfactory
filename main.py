@@ -1,7 +1,7 @@
 import pygame
 from context_menu import ContextMenu, ContextMenuItem
-from build import Build
 from enums import EScreen, EButtonType, EContextMenu
+from constructions.list import CONSTRUCTIONS
 
 # pygame setup
 pygame.init()
@@ -17,6 +17,12 @@ active_build = None
 active_connection = None
 
 
+def construction_context_menu_items(constructions):
+    menu_items = []
+    for (name, construction) in constructions:
+        menu_items.append(ContextMenuItem(f'Create {name}', create_building, construction))
+    return menu_items
+
 def collide_build(pos):
     collided = None
     for build in builds:
@@ -27,12 +33,18 @@ def collide_build(pos):
         collided.selected = True
     return collided
 
+def draw_grid(screen):
+    for i in range(0, EScreen.WIDTH // EScreen.CELL_SIZE):
+        pygame.draw.line(screen, EScreen.GRID_COLOR, (i * EScreen.CELL_SIZE, 0), (i * EScreen.CELL_SIZE, EScreen.HEIGHT))
+        pygame.draw.line(screen, EScreen.GRID_COLOR, (0, i * EScreen.CELL_SIZE), (EScreen.WIDTH, i * EScreen.CELL_SIZE))
+
+
 # context menu callbacks
-def quit(rel, arg):
+def quit(rel, _):
     pygame.quit()
 
-def create_building(rel, _):
-    builds.append(Build(150, 80, rel))
+def create_building(rel, construction):
+    builds.append(construction(rel))
 
 def delete_building(rel, build):
     builds.remove(build)
@@ -67,10 +79,9 @@ while running:
                                 ContextMenuItem('Delete build', delete_building, build),
                             ])
                         else:
-                            context_menu.open(event.pos, [
-                                ContextMenuItem('Create build', create_building),
-                                ContextMenuItem('Quit', quit),
-                            ])
+                            menu_items = construction_context_menu_items(CONSTRUCTIONS)
+                            menu_items.append(ContextMenuItem('Quit', quit, running))
+                            context_menu.open(event.pos, menu_items)
 
             case pygame.MOUSEBUTTONUP:
                 # connection
@@ -87,10 +98,12 @@ while running:
                 # move build
                 if active_build and not active_connection:
                     active_build.move(event.rel)
-            
+
 
     # render
     screen.fill(EScreen.BACKGROUND_COLOR)
+
+    draw_grid(screen)
 
     for build in builds:
         build.draw(screen)

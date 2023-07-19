@@ -3,7 +3,9 @@ class EScreen:
     FPS = 60
     WIDTH = 1600
     HEIGHT = 900
+    CELL_SIZE = 10
     BACKGROUND_COLOR = '#333333'
+    GRID_COLOR = '#555555'
 
 class EContextMenu:
     COLOR = '#AAAAAA'
