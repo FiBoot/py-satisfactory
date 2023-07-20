@@ -1,6 +1,7 @@
 
 import uuid
 import pygame
+import utils
 from enums import EScreen
 
 class EBuildColor:
@@ -18,31 +19,45 @@ class Build:
     def __init__(self, size, pos, connections = [], shift = (0, 0)):
         self.uuid = uuid.uuid4().hex
         self.size = size
-        self.pos = pos
+        self.pos = (pos[0] + size[0] // 2, pos[1] + size[1] // 2)
         self.shift = shift
-        self.move((0, 0)) # init grid_pos
+        self.move((0, 0)) # init grid_pos with shift
         self.connections = connections
         self.selected = False
 
     def __str__(self):
         return f'{self.uuid} [{self.grid_pos[0]}, {self.grid_pos[1]}]'
+    
+    @property
+    def start_pos(self):
+        return (self.grid_pos[0] - self.size[0] // 2, self.grid_pos[1] - self.size[1] // 2)
 
     def move(self, rel):
-        self.pos = self.pos[0] + rel[0], self.pos[1] + rel[1]
+        self.pos = utils.add_pair(self.pos, rel)
         self.grid_pos = align_pos_on_grid(self.pos, self.shift)
 
+    def rotate(self):
+        self.size = (self.size[1], self.size[0])
+        self.shift = (self.shift[1], self.shift[0])
+        for connection in self.connections:
+            connection.rotate()
+
     def draw(self, screen):
-        rect = pygame.Rect(self.grid_pos[0], self.grid_pos[1], self.size[0], self.size[1])
+        # build
+        rect = pygame.Rect(self.start_pos[0], self.start_pos[1], self.size[0], self.size[1])
         color = EBuildColor.SELECTED if self.selected else EBuildColor.BASE
         pygame.draw.rect(screen, color, rect)
+        # middle
+        pygame.draw.circle(screen, 'red', self.grid_pos, 2)
+        # connection
         for connection in self.connections:
             connection.draw(screen, self.grid_pos)
 
     def collide(self, rel):
-        return rel[0] > self.grid_pos[0] and rel[0] < self.grid_pos[0] + self.size[0] and rel[1] > self.grid_pos[1] and rel[1] < self.grid_pos[1] + self.size[1]
+        return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + self.size[0] and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + self.size[1]
 
     def collide_connection(self, rel):
-        inside_pos = [rel[0] - self.grid_pos[0], rel[1] - self.grid_pos[1]]
+        inside_pos = utils.sub_pair(rel, self.grid_pos)
         for connection in self.connections:
             if connection.collide(inside_pos):
                 return connection

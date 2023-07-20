@@ -1,28 +1,27 @@
-from constructions.build import Build
-from constructions.connection import Connection, EConnectionLet, EConnectionType
-
+from build import Build
+from connection import BeltOutlet, BeltInlet, EOrientation
 
 class ConveyorSpliter(Build):
     def __init__(self, pos):
         connections = [
-            Connection(self, (10, 20), EConnectionLet.INLET),
-            Connection(self, (0, 10)),
-            Connection(self, (10, 0)),
-            Connection(self, (20, 10)),
+            BeltOutlet(self, (0, -20)),
+            BeltOutlet(self, (20, 0), EOrientation.EAST),
+            BeltInlet(self, (0, 20), EOrientation.SOUTH),
+            BeltOutlet(self, (-20, 0), EOrientation.WEST),
         ]
         Build.__init__(self, (40, 40), pos, connections)
 
 class ConveyorMerger(Build):
     def __init__(self, pos):
         connections = [
-            Connection(self, (10, 20)),
-            Connection(self, (0, 10), EConnectionLet.INLET),
-            Connection(self, (10, 0), EConnectionLet.INLET),
-            Connection(self, (20, 10), EConnectionLet.INLET)
+            BeltInlet(self, (0, -20)),
+            BeltInlet(self, (20, 0), EOrientation.EAST),
+            BeltOutlet(self, (0, 20), EOrientation.SOUTH),
+            BeltInlet(self, (-20, 0), EOrientation.WEST),
         ]
         Build.__init__(self, (40, 40), pos, connections)
 
 LOGISTIC_CONSTRUCTIONS = [
-    ['ConveyorSpliter', ConveyorSpliter],
-    ['ConveyorMerger', ConveyorMerger],
+    ['Conveyor Spliter', ConveyorSpliter],
+    ['Conveyor Merger', ConveyorMerger],
 ]
