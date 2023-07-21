@@ -29,6 +29,8 @@ def rotate_build(rel, build):
 
 def delete_building(rel, build):
     constructed_builds.remove(build)
+    build.delete()
+    del build
 
 
 # funcs
@@ -114,8 +116,7 @@ while running:
                     for build in constructed_builds:
                         if build != active_build and build.collide(event.pos):
                             connection = build.collide_connection(event.pos)
-                            if connection and connection.type != active_connection.type:
-                                active_connection.connect(connection)
+                            active_connection.try_connect(connection)
                     active_connection = None
                 active_build = None
 
@@ -132,6 +133,8 @@ while running:
 
     for build in constructed_builds:
         build.draw(screen)
+    for build in constructed_builds:
+        build.draw_connection_lines(screen)
 
     context_menu.draw(screen)
 

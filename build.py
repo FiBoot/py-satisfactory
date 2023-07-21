@@ -32,6 +32,12 @@ class Build:
     def start_pos(self):
         return (self.grid_pos[0] - self.size[0] // 2, self.grid_pos[1] - self.size[1] // 2)
 
+    def delete(self):
+        for connection in self.connections:
+            if connection.connected_to:
+                connection.connected_to.connected_to = None
+            del connection
+
     def move(self, rel):
         self.pos = utils.add_pair(self.pos, rel)
         self.grid_pos = align_pos_on_grid(self.pos, self.shift)
@@ -47,11 +53,14 @@ class Build:
         rect = pygame.Rect(self.start_pos[0], self.start_pos[1], self.size[0], self.size[1])
         color = EBuildColor.SELECTED if self.selected else EBuildColor.BASE
         pygame.draw.rect(screen, color, rect)
-        # middle
-        pygame.draw.circle(screen, 'red', self.grid_pos, 2)
-        # connection
+        # connections
         for connection in self.connections:
             connection.draw(screen, self.grid_pos)
+        # middle
+        # pygame.draw.circle(screen, 'red', self.grid_pos, 2)
+    
+    def draw_connection_lines(self, screen):
+        pass
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + self.size[0] and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + self.size[1]

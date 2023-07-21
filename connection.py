@@ -5,6 +5,10 @@ from enums import EOrientation
 
 class EConnection:
     SIZE = 20
+    OUTLET_COLOR = '#00A6A6'
+    INLET_COLOR = '#F49F0A'
+    LINE_COLOR = '#C0C0C0'
+    LINE_THICKNESS = 5
 
 class EConnectionLet:
     OUTLET = 'OUTLET'
@@ -13,10 +17,6 @@ class EConnectionLet:
 class EConnectionType:
     BELT = 'BELT'
     PIPE = 'PIPE'
-
-class EConnectionColor: 
-    OUTLET = '#00A6A6'
-    INLET = '#F49F0A'
 
 def rect_by_orientation(pos, orientation, size):
    match orientation:
@@ -54,8 +54,15 @@ class Connection:
         self.pos = (-self.pos[1], self.pos[0])
         self.orientation = (self.orientation + 1) % 4
 
+    def try_connect(self, connection):
+        if connection and connection.let != self.let and connection.type == self.type:
+            if connection.connected_to:
+                connection.connected_to.connected_to = None
+            self.connected_to = connection
+            connection.connected_to = self
+
     def draw(self, screen, build_pos):
-        color = EConnectionColor.OUTLET if self.let == EConnectionLet.OUTLET else EConnectionColor.INLET
+        color = EConnection.OUTLET_COLOR if self.let == EConnectionLet.OUTLET else EConnection.INLET_COLOR
         start_pos = utils.add_pair(build_pos, self.start_pos)
         rect = rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
         match self.type:
@@ -71,7 +78,13 @@ class Connection:
                         pygame.draw.rect(screen, color, rect, border_top_left_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
                     case EOrientation.WEST:
                         pygame.draw.rect(screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
-        pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
+        # middle
+        # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
+        # connection line
+        if self.connected_to and self.let == EConnectionLet.OUTLET:
+            connection_start_pos = utils.add_pair(build_pos, self.pos)
+            connection_to_start_pos = utils.add_pair(self.connected_to.build.grid_pos, self.connected_to.pos)
+            pygame.draw.line(screen, EConnection.LINE_COLOR, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + EConnection.SIZE and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + EConnection.SIZE

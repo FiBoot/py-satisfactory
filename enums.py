@@ -1,8 +1,8 @@
 
 class EScreen:
     FPS = 60
-    WIDTH = 800
-    HEIGHT = 600
+    WIDTH = 1200
+    HEIGHT = 760
     CELL_SIZE = 10
     BACKGROUND_COLOR = '#303030'
     GRID_COLOR = '#505050'
