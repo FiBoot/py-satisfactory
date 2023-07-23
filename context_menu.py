@@ -8,10 +8,11 @@ class EContextMenuType:
 class ContextMenuItem:
     def __init__(self, text):
         self.text = text
+        self.width = EContextMenu.WIDTH
 
     def collide(self, pos, rel, index):
         height = index * EContextMenu.HEIGHT
-        return True if rel[0] > pos[0] and rel[0] < pos[0] + EContextMenu.WIDTH and rel[1] > pos[1] + height and rel[1] < pos[1] + height + EContextMenu.HEIGHT else False
+        return True if rel[0] > pos[0] and rel[0] < pos[0] + self.width and rel[1] > pos[1] + height and rel[1] < pos[1] + height + EContextMenu.HEIGHT else False
 
     def draw(self, screen, font, pos, index):
         rect = pygame.Rect(pos[0], pos[1] + index * EContextMenu.HEIGHT, EContextMenu.WIDTH, EContextMenu.HEIGHT)
@@ -28,8 +29,9 @@ class ContextMenuBaseItem(ContextMenuItem):
         self.arg = arg
 
 class SubContextMenuRecipe(ContextMenuBaseItem):
-    def __init__(self, callback, recipe):
-        ContextMenuBaseItem.__init__(self, recipe.name, callback, recipe)
+    def __init__(self, callback, args):
+        ContextMenuBaseItem.__init__(self, args[1].name, callback, args)
+        self.width = EContextMenu.WIDTH * 2
 
     def draw_recipe_components(self, screen, font, pos, components, index, color):
         for component in components:
@@ -49,9 +51,9 @@ class SubContextMenuRecipe(ContextMenuBaseItem):
         pygame.draw.rect(screen, EContextMenu.COLOR, rect)
         text = font.render(self.text, True, EContextMenu.FONT_COLOR)
         screen.blit(text, (pos[0] + EContextMenu.PADDING, calc_pos[1] + EContextMenu.PADDING))
-        component_index = self.draw_recipe_components(screen, font, calc_pos, self.arg.inputs, 0, EColor.INLET_COLOR)
+        component_index = self.draw_recipe_components(screen, font, calc_pos, self.arg[1].inputs, 0, EColor.INLET_COLOR)
         calc_pos = (calc_pos[0] + EContextMenu.RECIPE_COMPONENT_WIDTH + EContextMenu.PADDING, calc_pos[1])
-        self.draw_recipe_components(screen, font, calc_pos, self.arg.outputs, component_index, EColor.OUTLET_COLOR)
+        self.draw_recipe_components(screen, font, calc_pos, self.arg[1].outputs, component_index, EColor.OUTLET_COLOR)
 
 
 class SubContextMenuItem(ContextMenuItem):

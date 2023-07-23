@@ -11,6 +11,7 @@ class EScreen:
 class EColor:
     OUTLET_COLOR = '#00A6A6'
     INLET_COLOR = '#F49F0A'
+    CONNECTION_LINE_COLOR = '#C0C0C0'
 
 class EContextMenu:
     COLOR = '#AAAAAA'

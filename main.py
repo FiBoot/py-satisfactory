@@ -12,7 +12,6 @@ font = pygame.font.SysFont(None, EContextMenu.FONT_SIZE)
 clock = pygame.time.Clock()
 context_menu = ContextMenu(font)
 
-
 constructed_builds = []
 active_build = None
 active_connection = None
@@ -33,9 +32,9 @@ def delete_building(rel, build):
     build.delete()
     del build
 
-def select_recip(build, recipe):
-    print(build)
-    print(recipe)
+def select_recip(rel, args):
+    [build, recipe] = args
+    build.recipe = recipe
 
 
 # funcs
@@ -51,7 +50,7 @@ def construction_context_menu_items(constructions):
 def build_recipe_sub_context_menu(build):
     menu_item = []
     for recipe in CONSTRUCTOR_RECIPES:
-        menu_item.append(SubContextMenuRecipe(select_recip, recipe))
+        menu_item.append(SubContextMenuRecipe(select_recip, (build, recipe)))
     return SubContextMenuItem('Recipes', menu_item)
 
 def collide_build(pos, builds):
@@ -151,9 +150,9 @@ while running:
     draw_grid(screen)
 
     for build in constructed_builds:
-        build.draw(screen)
+        build.draw(screen, font)
     for build in constructed_builds:
-        build.draw_connection_lines(screen)
+        build.draw_connection_lines(screen, font)
 
     context_menu.draw(screen)
 

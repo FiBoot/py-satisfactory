@@ -4,7 +4,6 @@ from enums import EOrientation, EColor
 
 class EConnection:
     SIZE = 20
-    LINE_COLOR = '#C0C0C0'
     LINE_THICKNESS = 5
 
 class EConnectionLet:
@@ -76,11 +75,6 @@ class Connection:
                         pygame.draw.rect(screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
         # middle
         # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
-        # connection line
-        if self.connected_to and self.let == EConnectionLet.OUTLET:
-            connection_start_pos = utils.add_pair(build_pos, self.pos)
-            connection_to_start_pos = utils.add_pair(self.connected_to.build.grid_pos, self.connected_to.pos)
-            pygame.draw.line(screen, EConnection.LINE_COLOR, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + EConnection.SIZE and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + EConnection.SIZE
