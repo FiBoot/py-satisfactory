@@ -1,4 +1,5 @@
 import pygame
+import copy
 from constructions.list import CONSTRUCTION_LIST
 from recipes.list import RECIPE_LIST
 from context_menu import *
@@ -15,7 +16,7 @@ context_menu = ContextMenu(font)
 constructed_builds = []
 active_build = None
 active_connection = None
-
+clipboard = None
 
 # context menu callbacks
 def quit(rel, _):
@@ -85,9 +86,6 @@ def draw_grid(screen):
         pygame.draw.line(screen, color, (0, i * EScreen.CELL_SIZE), (EScreen.WIDTH, i * EScreen.CELL_SIZE))
 
 
-# img = pygame.image.load('assets/ressources/Iron_Ingot.png')
-# screen.blit(img, (600, 300))
-
 # main loop
 running = True
 while running:
@@ -109,6 +107,16 @@ while running:
                     selected_build.rotate()
                 if pressed_keys[pygame.K_d] and selected_build:
                     delete_building(None, selected_build)
+                if pressed_keys[pygame.K_c]:
+                    build = collide_build(pygame.mouse.get_pos(), constructed_builds)
+                    if build:
+                        clipboard = copy.deepcopy(build)
+                        print(clipboard)
+                if pressed_keys[pygame.K_v] and clipboard:
+                    new_build = copy.deepcopy(clipboard)
+                    new_build.pos = pygame.mouse.get_pos()
+                    new_build.move((0, 0))
+                    constructed_builds.append(new_build)
 
             case pygame.MOUSEBUTTONDOWN:
                 match event.button: 
