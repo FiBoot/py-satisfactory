@@ -1,5 +1,6 @@
 import pygame
 from constructions.list import CONSTRUCTION_LIST
+from recipes.constructor import CONSTRUCTOR_RECIPES
 from context_menu import *
 from enums import *
 
@@ -32,6 +33,10 @@ def delete_building(rel, build):
     build.delete()
     del build
 
+def select_recip(build, recipe):
+    print(build)
+    print(recipe)
+
 
 # funcs
 def construction_context_menu_items(constructions):
@@ -42,6 +47,12 @@ def construction_context_menu_items(constructions):
             sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction))    
         menu_items.append(SubContextMenuItem(list_name, sub_context_menu_items))                    
     return menu_items
+
+def build_recipe_sub_context_menu(build):
+    menu_item = []
+    for recipe in CONSTRUCTOR_RECIPES:
+        menu_item.append(SubContextMenuRecipe(select_recip, recipe))
+    return SubContextMenuItem('Recipes', menu_item)
 
 def collide_build(pos, builds):
     collided = None
@@ -66,6 +77,9 @@ def draw_grid(screen):
         pygame.draw.line(screen, color, (0, i * EScreen.CELL_SIZE), (EScreen.WIDTH, i * EScreen.CELL_SIZE))
 
 
+# img = pygame.image.load('assets/ressources/Iron_Ingot.png')
+# screen.blit(img, (600, 300))
+
 # main loop
 running = True
 while running:
@@ -75,6 +89,10 @@ while running:
         match event.type:
             case pygame.QUIT:
                 running = False
+
+            case pygame.MOUSEWHEEL:
+                if context_menu.displayed and context_menu.sub_menu:
+                    context_menu.slide_sub_menu(event.y)
 
             case pygame.KEYDOWN:
                 pressed_keys = pygame.key.get_pressed()
@@ -102,6 +120,7 @@ while running:
                         build = collide_build(event.pos, constructed_builds)
                         if build:
                             context_menu.open(event.pos, [
+                                build_recipe_sub_context_menu(build),
                                 ContextMenuBaseItem('Rotate', rotate_build, build),
                                 ContextMenuBaseItem('Delete', delete_building, build),
                             ])

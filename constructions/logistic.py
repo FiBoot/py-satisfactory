@@ -1,5 +1,7 @@
 from build import Build
-from connection import BeltOutlet, BeltInlet, EOrientation
+from data import EConstruction
+from enums import EOrientation
+from connection import BeltOutlet, BeltInlet
 
 class ConveyorSpliter(Build):
     def __init__(self, pos):
@@ -9,7 +11,7 @@ class ConveyorSpliter(Build):
             BeltInlet(self, (0, 20), EOrientation.SOUTH),
             BeltOutlet(self, (-20, 0), EOrientation.WEST),
         ]
-        Build.__init__(self, (40, 40), pos, connections)
+        Build.__init__(self, EConstruction.CONVEYORSPLITER, (40, 40), pos, connections)
 
 class ConveyorMerger(Build):
     def __init__(self, pos):
@@ -19,9 +21,4 @@ class ConveyorMerger(Build):
             BeltOutlet(self, (0, 20), EOrientation.SOUTH),
             BeltInlet(self, (-20, 0), EOrientation.WEST),
         ]
-        Build.__init__(self, (40, 40), pos, connections)
-
-LOGISTIC_CONSTRUCTIONS = [
-    ['Conveyor Spliter', ConveyorSpliter],
-    ['Conveyor Merger', ConveyorMerger],
-]
+        Build.__init__(self, EConstruction.CONVEYORMERGER, (40, 40), pos, connections)

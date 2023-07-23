@@ -1,5 +1,4 @@
 
-import uuid
 import pygame
 import utils
 from enums import EScreen
@@ -16,8 +15,8 @@ def align_pos_on_grid(pos, shift):
     )
 
 class Build:
-    def __init__(self, size, pos, connections = [], shift = (0, 0)):
-        self.uuid = uuid.uuid4().hex
+    def __init__(self, name, size, pos, connections = [], shift = (0, 0)):
+        self.name = name
         self.size = size
         self.pos = (pos[0] + size[0] // 2, pos[1] + size[1] // 2)
         self.shift = shift
@@ -26,7 +25,7 @@ class Build:
         self.selected = False
 
     def __str__(self):
-        return f'{self.uuid} [{self.grid_pos[0]}, {self.grid_pos[1]}]'
+        return f'{self.name} {self.pos}'
     
     @property
     def start_pos(self):

@@ -1,12 +1,9 @@
-import uuid
 import pygame
 import utils
-from enums import EOrientation
+from enums import EOrientation, EColor
 
 class EConnection:
     SIZE = 20
-    OUTLET_COLOR = '#00A6A6'
-    INLET_COLOR = '#F49F0A'
     LINE_COLOR = '#C0C0C0'
     LINE_THICKNESS = 5
 
@@ -35,7 +32,6 @@ def rect_by_orientation(pos, orientation, size):
 
 class Connection:
     def __init__(self, build, pos, orientation = EOrientation.NORTH, let = EConnectionLet.OUTLET, type = EConnectionType.BELT):
-        self.uuid = uuid.uuid4().hex
         self.build = build
         self.pos = pos
         self.orientation = orientation
@@ -62,7 +58,7 @@ class Connection:
             connection.connected_to = self
 
     def draw(self, screen, build_pos):
-        color = EConnection.OUTLET_COLOR if self.let == EConnectionLet.OUTLET else EConnection.INLET_COLOR
+        color = EColor.OUTLET_COLOR if self.let == EConnectionLet.OUTLET else EColor.INLET_COLOR
         start_pos = utils.add_pair(build_pos, self.start_pos)
         rect = rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
         match self.type:
@@ -100,7 +96,7 @@ class BeltInlet(Connection):
 
 class PipeOutlet(Connection):
     def __init__(self, build, pos, orientation = EOrientation.NORTH):
-        Connection.__init__(self, build, pos, orientation, EConnectionLet.OUTLET, EConnectionType.PIPE)
+        Connection.__init__(self, build, pos, orientation, type=EConnectionType.PIPE)
 
 class PipeInlet(Connection):
     def __init__(self, build, pos, orientation = EOrientation.NORTH):
