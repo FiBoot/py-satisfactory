@@ -1,10 +1,11 @@
+from enums import EBuildType
 from data import EConstruction
 from constructions.production import *
 from constructions.logistic import *
 from constructions.extraction import *
 
 CONSTRUCTION_LIST = [
-    ('Production', [
+    (EBuildType.PRODUCTION, [
         (EConstruction.SMELTER, Smelter),
         (EConstruction.FOUNDRY, Foundry),
         (EConstruction.CONSTRUCTOR, Constructor),
@@ -14,11 +15,11 @@ CONSTRUCTION_LIST = [
         (EConstruction.PACKAGER, Packager),
         (EConstruction.BLENDER, Blender)
     ]),
-    ('Logistic', [
+    (EBuildType.LOGISTIC, [
         (EConstruction.CONVEYORSPLITER, ConveyorSpliter),
         (EConstruction.CONVEYORMERGER, ConveyorMerger),
     ]),
-    ('Extraction', [
+    (EBuildType.EXTRACTOR, [
         (EConstruction.MINERMK1, MinerMk1),
         (EConstruction.MINERMK2, MinerMk2),
         (EConstruction.MINERMK3, MinerMk3),

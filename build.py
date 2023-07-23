@@ -16,8 +16,8 @@ def align_pos_on_grid(pos, shift):
     )
 
 class Build:
-    def __init__(self, name, size, pos, connections = [], shift = (0, 0)):
-        self.name = name
+    def __init__(self, type, size, pos, connections = [], shift = (0, 0)):
+        self.type = type
         self.size = size
         self.pos = (pos[0] + size[0] // 2, pos[1] + size[1] // 2)
         self.shift = shift
@@ -27,7 +27,7 @@ class Build:
         self.recipe = None
 
     def __str__(self):
-        return f'{self.name} {self.pos}'
+        return f'{self.type} {self.pos}'
     
     @property
     def start_pos(self):

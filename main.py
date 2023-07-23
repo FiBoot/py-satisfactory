@@ -1,6 +1,6 @@
 import pygame
 from constructions.list import CONSTRUCTION_LIST
-from recipes.constructor import CONSTRUCTOR_RECIPES
+from recipes.list import RECIPE_LIST
 from context_menu import *
 from enums import *
 
@@ -38,21 +38,6 @@ def select_recip(rel, args):
 
 
 # funcs
-def construction_context_menu_items(constructions):
-    menu_items = []
-    for (list_name, construction_list) in constructions:
-        sub_context_menu_items = []
-        for (name, construction) in construction_list:
-            sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction))    
-        menu_items.append(SubContextMenuItem(list_name, sub_context_menu_items))                    
-    return menu_items
-
-def build_recipe_sub_context_menu(build):
-    menu_item = []
-    for recipe in CONSTRUCTOR_RECIPES:
-        menu_item.append(SubContextMenuRecipe(select_recip, (build, recipe)))
-    return SubContextMenuItem('Recipes', menu_item)
-
 def collide_build(pos, builds):
     collided = None
     for build in builds:
@@ -67,6 +52,30 @@ def get_selected_build(builds):
     for build in builds:
         if build.selected:
             return build
+    return None
+
+def construction_context_menu_items(constructions):
+    menu_items = []
+    for (list_name, construction_list) in constructions:
+        sub_context_menu_items = []
+        for (name, construction) in construction_list:
+            sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction))    
+        menu_items.append(SubContextMenuItem(list_name, sub_context_menu_items))                    
+    return menu_items
+
+def get_recipe_list(build):
+    for [name, recipes] in RECIPE_LIST:
+        if name == build.type:
+            return recipes
+    return None
+
+def build_recipe_list_menu_items(build):
+    menu_item = []
+    recipe_list = get_recipe_list(build)
+    if recipe_list:
+        for recipe in recipe_list:
+            menu_item.append(SubContextMenuRecipe(select_recip, (build, recipe)))
+        return SubContextMenuItem('Recipes', menu_item)
     return None
 
 def draw_grid(screen):
@@ -118,11 +127,14 @@ while running:
                         # open context menu
                         build = collide_build(event.pos, constructed_builds)
                         if build:
-                            context_menu.open(event.pos, [
-                                build_recipe_sub_context_menu(build),
+                            menu_items = [
                                 ContextMenuBaseItem('Rotate', rotate_build, build),
                                 ContextMenuBaseItem('Delete', delete_building, build),
-                            ])
+                            ]
+                            recipe_menu_items = build_recipe_list_menu_items(build)
+                            if recipe_menu_items:
+                                menu_items.insert(0, recipe_menu_items)
+                            context_menu.open(event.pos, menu_items)
                         else:
                             menu_items = construction_context_menu_items(CONSTRUCTION_LIST)
                             menu_items.append(ContextMenuBaseItem('Quit', quit, running))

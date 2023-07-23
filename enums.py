@@ -8,6 +8,11 @@ class EScreen:
     GRID_COLOR = '#505050'
     GRID_ALT_COLOR = '#505070'
 
+class EBuildType:
+    PRODUCTION = 'Production'
+    LOGISTIC = 'Logistic'
+    EXTRACTOR = 'Extractor'
+
 class EColor:
     OUTLET_COLOR = '#00A6A6'
     INLET_COLOR = '#F49F0A'

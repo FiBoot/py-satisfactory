@@ -33,13 +33,13 @@ class ERessource:
     BAUXITE = 'Bauxite'
     SAM_ORE = 'S.A.M. Ore'
     URANIUM = 'Uranium'
-    INGOTS = 'Ingots'
+    # INGOTS
     IRON_INGOT = 'Iron_Ingot'
     COPPER_INGOT = 'Copper_Ingot'
     CATERIUM_INGOT = 'Caterium_Ingot'
     STEEL_INGOT = 'Steel_Ingot'
     ALUMINUM_INGOT = 'Aluminum_Ingot'
-    MINERALS = 'Minerals'
+    # MINERALS
     CONCRETE = 'Concrete'
     QUARTZ_CRYSTAL = 'Quartz_Crystal'
     SILICA = 'Silica'
@@ -140,6 +140,7 @@ class ERessource:
     RIFLE_AMMO = 'Rifle_Ammo'
     HOMING_RIFLE_AMMO = 'Homing_Rifle_Ammo'
     TURBO_RIFLE_AMMO = 'Turbo_Rifle_Ammo'
+    RIFLE_CARTRIDGE = 'Rifle_Cartridge'
     NOBELISK = 'Nobelisk'
     GAS_NOBELISK = 'Gas_Nobelisk'
     PULSE_NOBELISK = 'Pulse_Nobelisk'
@@ -155,6 +156,7 @@ class ERessource:
     URANIUM_WASTE = 'Uranium_Waste'
     PLUTONIUM_WASTE = 'Plutonium_Waste'
     # SPECIAL
+    PORTABLE_MINER = 'Portable_Miner'
     BLUE_POWER_SLUG = 'Blue_Power_Slug'
     YELLOW_POWER_SLUG = 'Yellow_Power_Slug'
     PURPLE_POWER_SLUG = 'Purple_Power_Slug'
