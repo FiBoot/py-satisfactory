@@ -1,3 +1,5 @@
+import utils
+from enums import EScreen, EColor, EContextMenu
 from connection import EConnectionLet
 
 class RecipeComponent:
@@ -20,3 +22,20 @@ class Recipe:
         self.inputs = inputs
         self.outputs = outputs
         self.rate = 1
+
+    def draw_component(self, screen, font, pos, component):
+        # icon
+        icon = utils.get_icon(component.ressource)
+        screen.blit(icon, (pos[0], pos[1] + EScreen.PADDING // 2))
+        # text
+        text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
+        screen.blit(text, (pos[0] + EScreen.COMPONENT_WIDTH + EScreen.PADDING // 2, pos[1] + EScreen.PADDING))
+        # return next pos
+        return (pos[0] + EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING, pos[1])
+
+    def draw(self, screen, font, pos, index):
+        pos = utils.add_pair(pos, (EContextMenu.WIDTH * 3, EContextMenu.HEIGHT * index))
+        for (index, component) in enumerate(self.inputs):
+            pos = self.draw_component(screen, font, pos, component)
+        for (index, component) in enumerate(self.outputs):
+            pos = self.draw_component(screen, font, pos, component)

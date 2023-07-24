@@ -2,7 +2,8 @@ import pygame
 import copy
 from constructions.list import CONSTRUCTION_LIST
 from recipes.list import RECIPE_LIST
-from context_menu import *
+from context_menu import ContextMenu
+from context_menu_item import ContextMenuBaseItem, SubContextMenuItem, SubContextMenuRecipe
 from enums import *
 
 # pygame setup
@@ -60,7 +61,7 @@ def construction_context_menu_items(constructions):
     for (list_name, construction_list) in constructions:
         sub_context_menu_items = []
         for (name, construction) in construction_list:
-            sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction))    
+            sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction, EContextMenu.WIDTH * 2))    
         menu_items.append(SubContextMenuItem(list_name, sub_context_menu_items))                    
     return menu_items
 
@@ -81,7 +82,7 @@ def build_recipe_list_menu_items(build):
 
 def draw_grid(screen):
     for i in range(0, (EScreen.WIDTH // EScreen.CELL_SIZE) + 1):
-        color = EScreen.GRID_COLOR if i % 2 else EScreen.GRID_ALT_COLOR
+        color = EColor.GRID if i % 2 else EColor.GRID_ALT
         pygame.draw.line(screen, color, (i * EScreen.CELL_SIZE, 0), (i * EScreen.CELL_SIZE, EScreen.HEIGHT))
         pygame.draw.line(screen, color, (0, i * EScreen.CELL_SIZE), (EScreen.WIDTH, i * EScreen.CELL_SIZE))
 
@@ -111,7 +112,6 @@ while running:
                     build = collide_build(pygame.mouse.get_pos(), constructed_builds)
                     if build:
                         clipboard = copy.deepcopy(build)
-                        print(clipboard)
                 if pressed_keys[pygame.K_v] and clipboard:
                     new_build = copy.deepcopy(clipboard)
                     new_build.pos = pygame.mouse.get_pos()
@@ -165,7 +165,7 @@ while running:
 
 
     # render
-    screen.fill(EScreen.BACKGROUND_COLOR)
+    screen.fill(EColor.BACKGROUND)
 
     draw_grid(screen)
 

@@ -49,34 +49,28 @@ class Build:
         for connection in self.connections:
             connection.rotate()
     
-    def draw_recipe_component(self, screen, font, components, start_x, x_offset):
+    def draw_recipe_component(self, screen, font, components):
+        offsets = [
+            EScreen.COMPONENT_WIDTH // 2,
+            EScreen.PADDING // 2 + EScreen.COMPONENT_WIDTH,
+            EScreen.PADDING + EScreen.COMPONENT_WIDTH * 3//2,
+            EScreen.PADDING * 3//2 + EScreen.COMPONENT_WIDTH * 2,
+        ]
+        start_x = self.grid_pos[0] - offsets[len(components) - 1]
+        component_gap = EScreen.COMPONENT_WIDTH + EScreen.PADDING
         for (index, component) in enumerate(components):
-            x = start_x + index * x_offset
-            y = self.grid_pos[1] - EContextMenu.RECIPE_COMPONENT_WIDTH - EContextMenu.PADDING // 4 if component.let == EConnectionLet.OUTLET else self.grid_pos[1] + EContextMenu.PADDING // 4
+            x = start_x + index * component_gap
+            y = self.grid_pos[1] - EScreen.COMPONENT_WIDTH - EScreen.PADDING // 4 if component.let == EConnectionLet.OUTLET else self.grid_pos[1] + EScreen.PADDING // 4
             # icon
             try:
                 icon = pygame.image.load(f'./assets/ressources/{component.ressource}.png') 
             except:
                 icon = pygame.image.load('./assets/ressources/Not_Found.png')
-
             screen.blit(icon, (x, y))
             # text
-            text = font.render(f'{component.quantity}', True, EColor.OUTLET_COLOR if component.let == EConnectionLet.OUTLET else EColor.INLET_COLOR)
-            text_y = y - EContextMenu.FONT_SIZE + EContextMenu.PADDING // 2 if component.let == EConnectionLet.OUTLET else y + EContextMenu.RECIPE_COMPONENT_WIDTH
-            screen.blit(text, (x + EContextMenu.PADDING // 4, text_y))
-
-    def draw_recipe_components(self, screen, font):
-        start_x = self.grid_pos[0] - EContextMenu.RECIPE_COMPONENT_WIDTH // 2
-        x_offset = [
-                0,
-                EContextMenu.PADDING // 2 + EContextMenu.RECIPE_COMPONENT_WIDTH,
-                EContextMenu.PADDING + EContextMenu.RECIPE_COMPONENT_WIDTH * 3//2,
-                EContextMenu.PADDING * 3//2 + EContextMenu.RECIPE_COMPONENT_WIDTH * 2,
-            ][len(self.recipe.inputs) - 1]
-        y = self.grid_pos[1] - EContextMenu.RECIPE_COMPONENT_WIDTH - EContextMenu.PADDING // 2
-        self.draw_recipe_component(screen, font, self.recipe.inputs, start_x, x_offset)
-        y = self.grid_pos[1] + EContextMenu.PADDING // 2
-        self.draw_recipe_component(screen, font, self.recipe.outputs, start_x, x_offset)
+            text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
+            text_y = y - EContextMenu.FONT_SIZE + EScreen.PADDING // 2 if component.let == EConnectionLet.OUTLET else y + EScreen.COMPONENT_WIDTH
+            screen.blit(text, (x + EScreen.PADDING // 4, text_y))
 
     def draw(self, screen, font):
         # build
@@ -86,18 +80,19 @@ class Build:
         # connections
         for connection in self.connections:
             connection.draw(screen, self.grid_pos)
-        # draw recipe
+        # draw recipe components
         if self.recipe:
-            self.draw_recipe_components(screen, font)
+            self.draw_recipe_component(screen, font, self.recipe.outputs)
+            self.draw_recipe_component(screen, font, self.recipe.inputs)
         # middle
-        # pygame.draw.circle(screen, 'red', self.grid_pos, 2)
+        pygame.draw.circle(screen, 'red', self.grid_pos, 2)
     
     def draw_connection_lines(self, screen, font):
         for connection in self.connections:
             if connection.connected_to and connection.let == EConnectionLet.OUTLET:
                 connection_start_pos = utils.add_pair(self.grid_pos, connection.pos)
                 connection_to_start_pos = utils.add_pair(connection.connected_to.build.grid_pos, connection.connected_to.pos)
-                pygame.draw.line(screen, EColor.CONNECTION_LINE_COLOR, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
+                pygame.draw.line(screen, EColor.CONNECTION_LINE, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
 
 
     def collide(self, rel):

@@ -9,6 +9,7 @@ class EConstruction:
     REFINERY = 'Refinery'
     PACKAGER = 'Packager'
     BLENDER = 'Blender'
+    PARTICULE_ACCELERATOR = 'Particule Accelerator'
     # logistic
     CONVEYORSPLITER = 'Conveyor_Spliter'
     CONVEYORMERGER = 'Conveyor_Merger'

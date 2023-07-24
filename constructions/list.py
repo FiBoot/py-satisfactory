@@ -13,7 +13,8 @@ CONSTRUCTION_LIST = [
         (EConstruction.MANUFACTURER, Manufacturer),
         (EConstruction.REFINERY, Refinery),
         (EConstruction.PACKAGER, Packager),
-        (EConstruction.BLENDER, Blender)
+        (EConstruction.BLENDER, Blender),
+        (EConstruction.PARTICULE_ACCELERATOR, ParticuleAccelerator),
     ]),
     (EBuildType.LOGISTIC, [
         (EConstruction.CONVEYORSPLITER, ConveyorSpliter),

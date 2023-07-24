@@ -1,0 +1,32 @@
+remove cycles
+\d+s.+\n
+\n
+
+delete x min
+ / min(\d+x ||\t\d+x |\t)?
+/n
+
+first component line
+\t\d+x (.+)\n
+\n$1\n
+
+3-1
+^([a-zA-Z_: ]+)\n([a-zA-Z_]+)\n([\d\.]+)\n([a-zA-Z_-]+)\n([\d\.]+)\n([a-zA-Z_]+)\n([\d\.]+)\n([a-zA-Z_]+)\n([\d\.]+)\n
+\tRecipe(\n\t\t'$1',\n\t\tinputs=[\n\t\t\tRecipeInput(ERessource.$2, $3),\n\t\t\tRecipeInput(ERessource.$4, $5),\n\t\t\tRecipeInput(ERessource.$6, $7),\n\t\t],\n\t\toutputs=[RecipeOutput(ERessource.$8, $9)]\n\t),\n
+
+2-1
+^([a-zA-Z_: ]+)\n([a-zA-Z_]+)\n([\d\.]+)\n([a-zA-Z_-]+)\n([\d\.]+)\n([a-zA-Z_]+)\n([\d\.]+)\n
+\tRecipe(\n\t\t'$1',\n\t\tinputs=[\n\t\t\tRecipeInput(ERessource.$2, $3),\n\t\t\tRecipeInput(ERessource.$4, $5)\n\t\t],\n\t\toutputs=[RecipeOutput(ERessource.$6, $7)]\n\t),\n
+
+1-2
+^([a-zA-Z_: ]+)\n([a-zA-Z_]+)\n([\d\.]+)\n([a-zA-Z_-]+)\n([\d\.]+)\n([a-zA-Z_]+)\n([\d\.]+)\n
+\tRecipe(\n\t\t'$1',\n\t\tinputs=[RecipeInput(ERessource.$2, $3)],\n\t\toutputs=[\n\t\t\tRecipeOutput(ERessource.$4, $5),\n\t\t\tRecipeOutput(ERessource.$6, $7)\n\t\t]\n\t),\n
+
+1-1
+^([a-zA-Z_: ]+)\n([a-zA-Z_]+)\n([\d\.]+)\n([a-zA-Z_-]+)\n([\d\.]+)\n
+\tRecipe(\n\t\t'$1',\n\t\tinputs=[RecipeInput(ERessource.$2, $3)],\n\t\toutputs=[RecipeOutput(ERessource.$4, $5)]\n\t),\n
+
+
+uppercase ressources
+ERessource\.([a-zA-Z_]+)
+ERessource.\U$1

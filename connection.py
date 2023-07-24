@@ -57,7 +57,7 @@ class Connection:
             connection.connected_to = self
 
     def draw(self, screen, build_pos):
-        color = EColor.OUTLET_COLOR if self.let == EConnectionLet.OUTLET else EColor.INLET_COLOR
+        color = EColor.OUTLET if self.let == EConnectionLet.OUTLET else EColor.INLET
         start_pos = utils.add_pair(build_pos, self.start_pos)
         rect = rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
         match self.type:

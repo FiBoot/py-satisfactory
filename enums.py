@@ -4,28 +4,28 @@ class EScreen:
     WIDTH = 1200
     HEIGHT = 760
     CELL_SIZE = 10
-    BACKGROUND_COLOR = '#303030'
-    GRID_COLOR = '#505050'
-    GRID_ALT_COLOR = '#505070'
+    PADDING = 10
+    COMPONENT_WIDTH = 20
+
+class EColor:
+    BACKGROUND = '#303030'
+    FONT = '#101010'
+    GRID = '#505050'
+    GRID_ALT = '#505070'
+    OUTLET = '#00A6A6'
+    INLET = '#F49F0A'
+    CONNECTION_LINE = '#C0C0C0'
+    CONTEXT_MENU = '#AAAAAA'
 
 class EBuildType:
     PRODUCTION = 'Production'
     LOGISTIC = 'Logistic'
     EXTRACTOR = 'Extractor'
 
-class EColor:
-    OUTLET_COLOR = '#00A6A6'
-    INLET_COLOR = '#F49F0A'
-    CONNECTION_LINE_COLOR = '#C0C0C0'
-
 class EContextMenu:
-    COLOR = '#AAAAAA'
     FONT_SIZE = 20
-    FONT_COLOR = '#111111'
-    WIDTH = 160
+    WIDTH = 100
     HEIGHT = 30
-    PADDING = 10
-    RECIPE_COMPONENT_WIDTH = 20
     SLIDE_HEIGHT = 40
 
 class EButtonType:

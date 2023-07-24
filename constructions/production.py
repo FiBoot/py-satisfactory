@@ -80,3 +80,13 @@ class Blender(Build):
             PipeInlet(self, (60, 80), EOrientation.SOUTH),
         ]
         Build.__init__(self, EConstruction.BLENDER, (180, 160), pos, connections)
+
+class ParticuleAccelerator(Build):
+    def __init__(self, pos):
+        connections = [
+            BeltOutlet(self, (-130, -120)),
+            BeltInlet(self, (-170, 120), EOrientation.SOUTH),
+            BeltInlet(self, (-130, 120), EOrientation.SOUTH),
+            PipeInlet(self, (-90, 120), EOrientation.SOUTH),
+        ]
+        Build.__init__(self, EConstruction.PARTICULE_ACCELERATOR, (380, 240), pos, connections)
