@@ -9,13 +9,14 @@ class EScreen:
 
 class EColor:
     BACKGROUND = '#303030'
-    FONT = '#101010'
     GRID = '#505050'
     GRID_ALT = '#505070'
+    CONTEXT_MENU = '#AAAAAA'
+    FONT = '#101010'
     OUTLET = '#00A6A6'
     INLET = '#FE5A1D'
+    PROCESSED_FONT = '#909090'
     CONNECTION_LINE = '#C0C0C0'
-    CONTEXT_MENU = '#AAAAAA'
 
 class EBuildType:
     PRODUCTION = 'Production'

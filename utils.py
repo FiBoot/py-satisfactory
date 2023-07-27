@@ -20,12 +20,5 @@ def calc_recipe_menu_width(recipe_list, component_width):
         max_length = new_length if new_length > max_length else max_length
     return max_length * component_width * 2 # component + text
     
-
-def get_icon(ressource):
-        try:
-            return pygame.image.load(f'./assets/ressources/{ressource}.png') 
-        except:
-            return pygame.image.load('./assets/ressources/Not_Found.png')
-
 def log(title, arg):
     print(f'{title}: {arg}\n')

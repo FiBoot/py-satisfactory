@@ -37,9 +37,7 @@ class Connection:
         self.let = let
         self.type = type
         self.connected_to = None
-    
-    def __str__(self):
-        return f'{self.uuid} [{self.let}] ({self.build})'
+        self.component = None
 
     @property
     def start_pos(self):
@@ -50,13 +48,18 @@ class Connection:
         self.orientation = (self.orientation + 1) % 4
 
     def try_connect(self, connection):
-        if connection and connection.let != self.let and connection.type == self.type:
-            if connection.connected_to:
+        if connection.let != self.let and connection.type == self.type:
+            if self.connected_to != None:
+                self.connected_to.connected_to = None
+            if connection.connected_to != None:
                 connection.connected_to.connected_to = None
             self.connected_to = connection
             connection.connected_to = self
+            # start diggin
+            self.build.find_start_build()
+            self.build.process()
 
-    def draw(self, screen, build_pos):
+    def draw(self, screen, font, build_pos):
         color = EColor.OUTLET if self.let == EConnectionLet.OUTLET else EColor.INLET
         start_pos = utils.add_pair(build_pos, self.start_pos)
         rect = rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
@@ -75,6 +78,10 @@ class Connection:
                         pygame.draw.rect(screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
         # center
         # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
+        if self.component and self.let == EConnectionLet.OUTLET:
+            text = font.render(f'{self.component.quantity * self.build.ratio}', True, EColor.PROCESSED_FONT)
+            screen.blit(text, (start_pos[0], start_pos[1] - 10)) # TODO padding with orientation
+
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + EConnection.SIZE and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + EConnection.SIZE

@@ -1,6 +1,7 @@
 
 import pygame
 import utils
+from icon import get_icon
 from enums import EScreen, EColor, EContextMenu
 from connection import EConnection, EConnectionLet
 
@@ -25,6 +26,7 @@ class Build:
         self.connections = connections
         self.selected = False
         self.recipe = None
+        self.ratio = 0
 
     def __str__(self):
         return f'{self.type} {self.pos}'
@@ -49,6 +51,17 @@ class Build:
         for connection in self.connections:
             connection.rotate()
     
+    def set_recipe(self, recipe):
+        for connection in self.connections:
+            connection.component = None
+        self.recipe = recipe
+        for output in recipe.outputs:
+            for connection in self.connections:
+                if connection.component == None and connection.let == output.let: # TODO if con.type == input.type
+                    connection.component = output
+                    break
+        self.find_start_build()
+
     def draw_recipe_component(self, screen, font, components):
         offsets = [
             EScreen.COMPONENT_WIDTH // 2,
@@ -62,10 +75,7 @@ class Build:
             x = start_x + index * component_gap
             y = self.grid_pos[1] - EScreen.COMPONENT_WIDTH - EScreen.PADDING // 4 if component.let == EConnectionLet.OUTLET else self.grid_pos[1] + EScreen.PADDING // 4
             # icon
-            try:
-                icon = pygame.image.load(f'./assets/ressources/{component.ressource}.png') 
-            except:
-                icon = pygame.image.load('./assets/ressources/Not_Found.png')
+            icon = get_icon(component.ressource)
             screen.blit(icon, (x, y))
             # text
             text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
@@ -77,17 +87,17 @@ class Build:
         rect = pygame.Rect(self.start_pos[0], self.start_pos[1], self.size[0], self.size[1])
         color = EBuildColor.SELECTED if self.selected else EBuildColor.BASE
         pygame.draw.rect(screen, color, rect)
-        # connections
-        for connection in self.connections:
-            connection.draw(screen, self.grid_pos)
         # draw recipe components
         if self.recipe:
             self.draw_recipe_component(screen, font, self.recipe.outputs)
             self.draw_recipe_component(screen, font, self.recipe.inputs)
+        # connections
+        for connection in self.connections:
+            connection.draw(screen, font, self.grid_pos)
         # center
         # pygame.draw.circle(screen, 'red', self.grid_pos, 2)
     
-    def draw_connection_lines(self, screen, font):
+    def draw_connection_lines(self, screen):
         for connection in self.connections:
             if connection.connected_to and connection.let == EConnectionLet.OUTLET:
                 connection_start_pos = utils.add_pair(self.grid_pos, connection.pos)
@@ -104,3 +114,33 @@ class Build:
             if connection.collide(inside_pos):
                 return connection
         return None
+
+    def process(self, level = 0):
+        if self.recipe != None:
+            print(f'calculating ratio {self.type} ({level})')
+            # calc ratio
+            ratios = []
+            for input in self.recipe.inputs:
+                ratio = 0
+                for connection in self.connections:
+                    if connection.let == EConnectionLet.INLET:
+                        if connection.connected_to != None and connection.connected_to.component.ressource == input.ressource:
+                            ratio = connection.connected_to.component.quantity / input.quantity
+                            ratio = 1 if ratio > 1 else ratio 
+                            break
+                ratios.append(ratio)
+            print(f'ratios: {ratios}\n') # TODO prendre le plus petit du tableau (function utils?)
+            self.ratio = 0.5
+
+        # go up the chain
+        for connection in self.connections:
+            if connection.let == EConnectionLet.OUTLET and connection.connected_to:
+                connection.connected_to.build.process(level + 1)
+
+    def find_start_build(self):
+        if self.recipe != None:
+            if self.recipe.inputs == []:
+                return self.process() # start to go up
+            for connection in self.connections:
+                if connection.let == EConnectionLet.INLET and connection.connected_to != None:
+                    connection.connected_to.build.find_start_build() # we go deeper

@@ -23,6 +23,7 @@ class EConstruction:
     RESSOURCEWELLEXTRACTOR = 'Ressource-well Extractor'
 
 class ERessource:
+    UNKNOW = 'Not Found'
     # ORES
     LIMESTONE = 'Limestone'
     IRON_ORE = 'Iron Ore'

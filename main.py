@@ -37,7 +37,7 @@ def delete_building(rel, build):
 
 def select_recip(rel, args):
     [build, recipe] = args
-    build.recipe = recipe
+    build.set_recipe(recipe)
 
 
 # funcs
@@ -156,7 +156,8 @@ while running:
                     for build in constructed_builds:
                         if build != active_build and build.collide(event.pos):
                             connection = build.collide_connection(event.pos)
-                            active_connection.try_connect(connection)
+                            if connection:
+                                active_connection.try_connect(connection)
                     active_connection = None
                 active_build = None
 
@@ -174,7 +175,7 @@ while running:
     for build in constructed_builds:
         build.draw(screen, font)
     for build in constructed_builds:
-        build.draw_connection_lines(screen, font)
+        build.draw_connection_lines(screen)
 
     context_menu.draw(screen)
 

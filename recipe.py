@@ -1,10 +1,11 @@
 import pygame
 import utils
+from icon import get_icon
 from enums import EScreen, EColor, EContextMenu
-from connection import EConnectionLet
+from connection import EConnectionLet, EConnectionType
 
 class RecipeComponent:
-    def __init__(self, ressource, quantity, let = EConnectionLet.OUTLET):
+    def __init__(self, ressource, quantity, let = EConnectionLet.OUTLET, type = EConnectionType.BELT): # TODO typer les recipes definitions
         self.ressource = ressource
         self.quantity = round(quantity, 1)
         self.let = let
@@ -22,11 +23,10 @@ class Recipe:
         self.name = name
         self.inputs = inputs
         self.outputs = outputs
-        self.rate = 1
 
     def draw_component(self, screen, font, pos, component):
         # icon
-        icon = utils.get_icon(component.ressource)
+        icon = get_icon(component.ressource)
         screen.blit(icon, (pos[0], pos[1] + EScreen.PADDING // 2))
         # text
         text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
