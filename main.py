@@ -1,5 +1,6 @@
 import pygame
 import copy
+import utils
 from constructions.list import CONSTRUCTION_LIST
 from recipes.list import RECIPE_LIST
 from context_menu import ContextMenu
@@ -61,7 +62,7 @@ def construction_context_menu_items(constructions):
     for (list_name, construction_list) in constructions:
         sub_context_menu_items = []
         for (name, construction) in construction_list:
-            sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction, EContextMenu.WIDTH * 2))    
+            sub_context_menu_items.append(ContextMenuBaseItem(name, create_building, construction))    
         menu_items.append(SubContextMenuItem(list_name, sub_context_menu_items))                    
     return menu_items
 
@@ -75,8 +76,9 @@ def build_recipe_list_menu_items(build):
     menu_item = []
     recipe_list = get_recipe_list(build)
     if recipe_list:
+        recipe_menu_width = utils.calc_recipe_menu_width(recipe_list, EScreen.COMPONENT_WIDTH + EScreen.PADDING)
         for recipe in recipe_list:
-            menu_item.append(SubContextMenuRecipe(select_recip, (build, recipe)))
+            menu_item.append(SubContextMenuRecipe(select_recip, build, recipe, recipe_menu_width))
         return SubContextMenuItem('Recipes', menu_item)
     return None
 

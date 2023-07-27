@@ -1,7 +1,8 @@
 from enums import EContextMenu
+import utils
 
 class EContextMenuType:
-    BASE = 'BASE',
+    BASE = 'BASE'
     SUB = 'SUB'
 
 class ContextMenu:
@@ -21,6 +22,7 @@ class ContextMenu:
         self.close()
         self.pos = pos
         self.items = items
+        self.width = utils.calc_menu_width(items, EContextMenu.MIN_WIDTH, EContextMenu.CHAR_WIDTH)
         self.displayed = True
 
     def slide_sub_menu(self, dir):
@@ -31,7 +33,7 @@ class ContextMenu:
             if self.sub_menu:
                 return self.sub_menu.collide(rel)
             for index, item in enumerate(self.items):
-                if item.collide(self.pos, rel, index):
+                if item.collide(self.pos, self.width, rel, index):
                     match item.type:
                         case EContextMenuType.BASE:
                             item.callback(self.pos, item.arg)
@@ -45,6 +47,6 @@ class ContextMenu:
     def draw(self, screen):
         if self.displayed:
             for index, item in enumerate(self.items):
-                item.draw(screen, self.font, self.pos, index)
+                item.draw(screen, self.font, self.pos, self.width, index)
             if self.sub_menu:
                 self.sub_menu.draw(screen)

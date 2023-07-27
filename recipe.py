@@ -1,3 +1,4 @@
+import pygame
 import utils
 from enums import EScreen, EColor, EContextMenu
 from connection import EConnectionLet
@@ -33,8 +34,8 @@ class Recipe:
         # return next pos
         return (pos[0] + EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING, pos[1])
 
-    def draw(self, screen, font, pos, index):
-        pos = utils.add_pair(pos, (EContextMenu.WIDTH * 3, EContextMenu.HEIGHT * index))
+    def draw(self, screen, font, pos, width, index):
+        pos = utils.add_pair(pos, (width, EContextMenu.HEIGHT * index))
         for (index, component) in enumerate(self.inputs):
             pos = self.draw_component(screen, font, pos, component)
         for (index, component) in enumerate(self.outputs):

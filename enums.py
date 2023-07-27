@@ -24,8 +24,9 @@ class EBuildType:
 
 class EContextMenu:
     FONT_SIZE = 20
-    WIDTH = 100
+    MIN_WIDTH = 40
     HEIGHT = 30
+    CHAR_WIDTH = 6
     SLIDE_HEIGHT = 40
 
 class EButtonType:
