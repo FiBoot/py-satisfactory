@@ -42,5 +42,5 @@ class SubContextMenuRecipe(ContextMenuBaseItem):
         pygame.draw.rect(screen, EColor.CONTEXT_MENU, rect)
         text = font.render(self.text, True, EColor.FONT)
         screen.blit(text, (pos[0] + EScreen.PADDING, calc_y + EScreen.PADDING))
-        self.recipe.draw(screen, font, pos, width, index)
+        self.recipe.draw(screen, font, pos, width + self.recipe_menu_width, index)
 

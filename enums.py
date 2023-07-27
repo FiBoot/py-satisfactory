@@ -13,7 +13,7 @@ class EColor:
     GRID = '#505050'
     GRID_ALT = '#505070'
     OUTLET = '#00A6A6'
-    INLET = '#F49F0A'
+    INLET = '#FE5A1D'
     CONNECTION_LINE = '#C0C0C0'
     CONTEXT_MENU = '#AAAAAA'
 

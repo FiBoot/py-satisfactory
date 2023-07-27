@@ -6,7 +6,7 @@ from connection import EConnectionLet
 class RecipeComponent:
     def __init__(self, ressource, quantity, let = EConnectionLet.OUTLET):
         self.ressource = ressource
-        self.quantity = quantity
+        self.quantity = round(quantity, 1)
         self.let = let
 
 class RecipeOutput(RecipeComponent):
@@ -32,11 +32,11 @@ class Recipe:
         text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
         screen.blit(text, (pos[0] + EScreen.COMPONENT_WIDTH + EScreen.PADDING // 2, pos[1] + EScreen.PADDING))
         # return next pos
-        return (pos[0] + EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING, pos[1])
+        return (pos[0] - (EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING), pos[1])
 
     def draw(self, screen, font, pos, width, index):
-        pos = utils.add_pair(pos, (width, EContextMenu.HEIGHT * index))
-        for (index, component) in enumerate(self.inputs):
-            pos = self.draw_component(screen, font, pos, component)
+        pos = utils.add_pair(pos, (width - (EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING * 2), EContextMenu.HEIGHT * index))
         for (index, component) in enumerate(self.outputs):
+            pos = self.draw_component(screen, font, pos, component)
+        for (index, component) in enumerate(self.inputs):
             pos = self.draw_component(screen, font, pos, component)

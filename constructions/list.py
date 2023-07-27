@@ -7,12 +7,12 @@ from constructions.extraction import *
 CONSTRUCTION_LIST = [
     (EBuildType.PRODUCTION, [
         (EConstruction.SMELTER, Smelter),
-        (EConstruction.FOUNDRY, Foundry),
         (EConstruction.CONSTRUCTOR, Constructor),
         (EConstruction.ASSEMBLER, Assembler),
         (EConstruction.MANUFACTURER, Manufacturer),
         (EConstruction.REFINERY, Refinery),
         (EConstruction.PACKAGER, Packager),
+        (EConstruction.FOUNDRY, Foundry),
         (EConstruction.BLENDER, Blender),
         (EConstruction.PARTICULE_ACCELERATOR, ParticuleAccelerator),
     ]),

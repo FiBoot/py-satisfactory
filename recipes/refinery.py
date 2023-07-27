@@ -3,7 +3,7 @@ from recipe import Recipe, RecipeInput, RecipeOutput
 
 REFINERY_RECIPES = [
 	Recipe(
-		'Alternate: Coated_Cable',
+		'Alternate: Coated Cable',
 		inputs=[
 			RecipeInput(ERessource.WIRE, 37.5),
 			RecipeInput(ERessource.HEAVY_OIL_RESIDUE, 15)
@@ -11,7 +11,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.CABLE, 67.5)]
 	),
 	Recipe(
-		'Alternate: Diluted_Packaged_Fuel',
+		'Alternate: Diluted Packaged Fuel',
 		inputs=[
 			RecipeInput(ERessource.HEAVY_OIL_RESIDUE, 30),
 			RecipeInput(ERessource.PACKAGED_WATER, 60)
@@ -19,7 +19,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_FUEL, 60)]
 	),
 	Recipe(
-		'Alternate: Electrode_Aluminum_Scrap',
+		'Alternate: Electrode Aluminum Scrap',
 		inputs=[
 			RecipeInput(ERessource.ALUMINA_SOLUTION, 180),
 			RecipeInput(ERessource.PETROLEUM_COKE, 60)
@@ -30,7 +30,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Alternate: Heavy_Oil_Residue',
+		'Alternate: Heavy Oil Residue',
 		inputs=[RecipeInput(ERessource.CRUDE_OIL, 30)],
 		outputs=[
 			RecipeOutput(ERessource.HEAVY_OIL_RESIDUE, 40),
@@ -38,7 +38,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Alternate: Recycled_Plastic',
+		'Alternate: Recycled Plastic',
 		inputs=[
 			RecipeInput(ERessource.RUBBER, 30),
 			RecipeInput(ERessource.FUEL, 30)
@@ -46,7 +46,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PLASTIC, 60)]
 	),
 	Recipe(
-		'Alternate: Polyester_Fabric',
+		'Alternate: Polyester Fabric',
 		inputs=[
 			RecipeInput(ERessource.POLYMER_RESIN, 80),
 			RecipeInput(ERessource.WATER, 50)
@@ -54,7 +54,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.FABRIC, 5)]
 	),
 	Recipe(
-		'Alternate: Polymer_Resin',
+		'Alternate: Polymer Resin',
 		inputs=[RecipeInput(ERessource.CRUDE_OIL, 60)],
 		outputs=[
 			RecipeOutput(ERessource.POLYMER_RESIN, 130),
@@ -62,7 +62,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Alternate: Pure_Caterium_Ingot',
+		'Alternate: Pure Caterium Ingot',
 		inputs=[
 			RecipeInput(ERessource.CATERIUM_ORE, 24),
 			RecipeInput(ERessource.WATER, 24)
@@ -70,7 +70,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.CATERIUM_INGOT, 12)]
 	),
 	Recipe(
-		'Alternate: Pure_Copper_Ingot',
+		'Alternate: Pure Copper Ingot',
 		inputs=[
 			RecipeInput(ERessource.COPPER_ORE, 15),
 			RecipeInput(ERessource.WATER, 10)
@@ -78,7 +78,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.COPPER_INGOT, 37.5)]
 	),
 	Recipe(
-		'Alternate: Pure_Iron_Ingot',
+		'Alternate: Pure Iron Ingot',
 		inputs=[
 			RecipeInput(ERessource.IRON_ORE, 35),
 			RecipeInput(ERessource.WATER, 20)
@@ -86,7 +86,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.IRON_INGOT, 65)]
 	),
 	Recipe(
-		'Alternate: Pure_Quartz_Crystal',
+		'Alternate: Pure Quartz Crystal',
 		inputs=[
 			RecipeInput(ERessource.RAW_QUARTZ, 67.5),
 			RecipeInput(ERessource.WATER, 37.5)
@@ -94,7 +94,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.QUARTZ_CRYSTAL, 52.5)]
 	),
 	Recipe(
-		'Alternate: Recycled_Rubber',
+		'Alternate: Recycled Rubber',
 		inputs=[
 			RecipeInput(ERessource.PLASTIC, 30),
 			RecipeInput(ERessource.FUEL, 30)
@@ -102,7 +102,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.RUBBER, 60)]
 	),
 	Recipe(
-		'Alternate: Sloppy_Alumina',
+		'Alternate: Sloppy Alumina',
 		inputs=[
 			RecipeInput(ERessource.BAUXITE, 200),
 			RecipeInput(ERessource.WATER, 200)
@@ -110,7 +110,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.ALUMINA_SOLUTION, 240)]
 	),
 	Recipe(
-		'Alternate: Steamed_Copper_Sheet',
+		'Alternate: Steamed Copper Sheet',
 		inputs=[
 			RecipeInput(ERessource.COPPER_INGOT, 22.5),
 			RecipeInput(ERessource.WATER, 22.5)
@@ -118,7 +118,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.COPPER_SHEET, 22.5)]
 	),
 	Recipe(
-		'Alternate: Turbo_Heavy_Fuel',
+		'Alternate: Turbo Heavy Fuel',
 		inputs=[
 			RecipeInput(ERessource.HEAVY_OIL_RESIDUE, 37.5),
 			RecipeInput(ERessource.COMPACTED_COAL, 30)
@@ -134,7 +134,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.TURBOFUEL, 18.75)]
 	),
 	Recipe(
-		'Alternate: Wet_Concrete',
+		'Alternate: Wet Concrete',
 		inputs=[
 			RecipeInput(ERessource.LIMESTONE, 120),
 			RecipeInput(ERessource.WATER, 100)
@@ -142,7 +142,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.CONCRETE, 80)]
 	),
 	Recipe(
-		'Alumina_Solution',
+		'Alumina Solution',
 		inputs=[
 			RecipeInput(ERessource.BAUXITE, 120),
 			RecipeInput(ERessource.WATER, 180)
@@ -153,7 +153,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Aluminum_Scrap',
+		'Aluminum Scrap',
 		inputs=[
 			RecipeInput(ERessource.ALUMINA_SOLUTION, 240),
 			RecipeInput(ERessource.COAL, 120)
@@ -164,7 +164,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Liquid_Biofuel',
+		'Liquid Biofuel',
 		inputs=[
 			RecipeInput(ERessource.SOLID_BIOFUEL, 90),
 			RecipeInput(ERessource.WATER, 45)
@@ -180,7 +180,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Petroleum_Coke',
+		'Petroleum Coke',
 		inputs=[RecipeInput(ERessource.HEAVY_OIL_RESIDUE, 40)],
 		outputs=[RecipeOutput(ERessource.PETROLEUM_COKE, 120)]
 	),
@@ -193,12 +193,12 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.HEAVY_OIL_RESIDUE, 10)]
 	),
 	Recipe(
-		'Residual_Fuel',
+		'Residual Fuel',
 		inputs=[RecipeInput(ERessource.HEAVY_OIL_RESIDUE, 60)],
 		outputs=[RecipeOutput(ERessource.FUEL, 40)]
 	),
 	Recipe(
-		'Residual_Plastic',
+		'Residual Plastic',
 		inputs=[
 			RecipeInput(ERessource.POLYMER_RESIN, 60),
 			RecipeInput(ERessource.WATER, 20)
@@ -206,7 +206,7 @@ REFINERY_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PLASTIC, 20)]
 	),
 	Recipe(
-		'Residual_Rubber',
+		'Residual Rubber',
 		inputs=[
 			RecipeInput(ERessource.POLYMER_RESIN, 40),
 			RecipeInput(ERessource.WATER, 40)
@@ -222,7 +222,7 @@ REFINERY_RECIPES = [
 		]
 	),
 	Recipe(
-		'Sulfuric_Acid',
+		'Sulfuric Acid',
 		inputs=[
 			RecipeInput(ERessource.SULFUR, 50),
 			RecipeInput(ERessource.WATER, 50)

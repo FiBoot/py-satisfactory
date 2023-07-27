@@ -84,8 +84,8 @@ class Build:
         if self.recipe:
             self.draw_recipe_component(screen, font, self.recipe.outputs)
             self.draw_recipe_component(screen, font, self.recipe.inputs)
-        # middle
-        pygame.draw.circle(screen, 'red', self.grid_pos, 2)
+        # center
+        # pygame.draw.circle(screen, 'red', self.grid_pos, 2)
     
     def draw_connection_lines(self, screen, font):
         for connection in self.connections:

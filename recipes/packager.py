@@ -3,7 +3,7 @@ from recipe import Recipe, RecipeInput, RecipeOutput
 
 PACKAGER_RECIPES = [
 	Recipe(
-		'Packaged_Fuel',
+		'Packaged Fuel',
 		inputs=[
 			RecipeInput(ERessource.FUEL, 40),
 			RecipeInput(ERessource.EMPTY_CANISTER, 40)
@@ -11,7 +11,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_FUEL, 40)]
 	),
 	Recipe(
-		'Packaged_Alumina_Solution',
+		'Packaged Alumina Solution',
 		inputs=[
 			RecipeInput(ERessource.ALUMINA_SOLUTION, 120),
 			RecipeInput(ERessource.EMPTY_CANISTER, 120)
@@ -19,7 +19,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_ALUMINA_SOLUTION, 120)]
 	),
 	Recipe(
-		'Packaged_Liquid_Biofuel',
+		'Packaged Liquid Biofuel',
 		inputs=[
 			RecipeInput(ERessource.LIQUID_BIOFUEL, 40),
 			RecipeInput(ERessource.EMPTY_CANISTER, 40)
@@ -27,7 +27,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_LIQUID_BIOFUEL, 40)]
 	),
 	Recipe(
-		'Packaged_Oil',
+		'Packaged Oil',
 		inputs=[
 			RecipeInput(ERessource.CRUDE_OIL, 30),
 			RecipeInput(ERessource.EMPTY_CANISTER, 30)
@@ -35,7 +35,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_OIL, 30)]
 	),
 	Recipe(
-		'Packaged_Nitric_Acid',
+		'Packaged Nitric Acid',
 		inputs=[
 			RecipeInput(ERessource.NITRIC_ACID, 30),
 			RecipeInput(ERessource.EMPTY_FLUID_TANK, 30)
@@ -43,7 +43,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_NITRIC_ACID, 30)]
 	),
 	Recipe(
-		'Packaged_Nitrogen_Gas',
+		'Packaged Nitrogen Gas',
 		inputs=[
 			RecipeInput(ERessource.NITROGEN_GAS, 240),
 			RecipeInput(ERessource.EMPTY_FLUID_TANK, 60)
@@ -51,7 +51,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_NITROGEN_GAS, 60)]
 	),
 	Recipe(
-		'Packaged_Heavy_Oil_Residue',
+		'Packaged Heavy Oil Residue',
 		inputs=[
 			RecipeInput(ERessource.HEAVY_OIL_RESIDUE, 30),
 			RecipeInput(ERessource.EMPTY_CANISTER, 30)
@@ -59,7 +59,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_HEAVY_OIL_RESIDUE, 30)]
 	),
 	Recipe(
-		'Packaged_Sulfuric_Acid',
+		'Packaged Sulfuric Acid',
 		inputs=[
 			RecipeInput(ERessource.SULFURIC_ACID, 40),
 			RecipeInput(ERessource.EMPTY_CANISTER, 40)
@@ -67,7 +67,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_SULFURIC_ACID, 40)]
 	),
 	Recipe(
-		'Packaged_Turbofuel',
+		'Packaged Turbofuel',
 		inputs=[
 			RecipeInput(ERessource.TURBOFUEL, 20),
 			RecipeInput(ERessource.EMPTY_CANISTER, 20)
@@ -75,7 +75,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_TURBOFUEL, 20)]
 	),
 	Recipe(
-		'Packaged_Water',
+		'Packaged Water',
 		inputs=[
 			RecipeInput(ERessource.WATER, 60),
 			RecipeInput(ERessource.EMPTY_CANISTER, 60)
@@ -83,7 +83,7 @@ PACKAGER_RECIPES = [
 		outputs=[RecipeOutput(ERessource.PACKAGED_WATER, 60)]
 	),
     Recipe(
-		'Unpackage_Alumina_Solution',
+		'Unpackage Alumina Solution',
 		inputs=[RecipeInput(ERessource.PACKAGED_ALUMINA_SOLUTION, 120)],
 		outputs=[
 			RecipeOutput(ERessource.ALUMINA_SOLUTION, 120),
@@ -91,7 +91,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Liquid_Biofuel',
+		'Unpackage Liquid Biofuel',
 		inputs=[RecipeInput(ERessource.PACKAGED_LIQUID_BIOFUEL, 60)],
 		outputs=[
 			RecipeOutput(ERessource.LIQUID_BIOFUEL, 60),
@@ -99,7 +99,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Fuel',
+		'Unpackage Fuel',
 		inputs=[RecipeInput(ERessource.PACKAGED_FUEL, 60)],
 		outputs=[
 			RecipeOutput(ERessource.FUEL, 60),
@@ -107,7 +107,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Nitric_Acid',
+		'Unpackage Nitric Acid',
 		inputs=[RecipeInput(ERessource.PACKAGED_NITRIC_ACID, 20)],
 		outputs=[
 			RecipeOutput(ERessource.NITRIC_ACID, 20),
@@ -115,7 +115,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Nitrogen_Gas',
+		'Unpackage Nitrogen Gas',
 		inputs=[RecipeInput(ERessource.PACKAGED_NITROGEN_GAS, 60)],
 		outputs=[
 			RecipeOutput(ERessource.NITROGEN_GAS, 240),
@@ -123,7 +123,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Heavy_Oil_Residue',
+		'Unpackage Heavy Oil Residue',
 		inputs=[RecipeInput(ERessource.PACKAGED_HEAVY_OIL_RESIDUE, 20)],
 		outputs=[
 			RecipeOutput(ERessource.HEAVY_OIL_RESIDUE, 20),
@@ -131,7 +131,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Oil',
+		'Unpackage Oil',
 		inputs=[RecipeInput(ERessource.PACKAGED_OIL, 60)],
 		outputs=[
 			RecipeOutput(ERessource.CRUDE_OIL, 60),
@@ -139,7 +139,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Sulfuric_Acid',
+		'Unpackage Sulfuric Acid',
 		inputs=[RecipeInput(ERessource.PACKAGED_SULFURIC_ACID, 60)],
 		outputs=[
 			RecipeOutput(ERessource.SULFURIC_ACID, 60),
@@ -147,7 +147,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Turbofuel',
+		'Unpackage Turbofuel',
 		inputs=[RecipeInput(ERessource.PACKAGED_TURBOFUEL, 20)],
 		outputs=[
 			RecipeOutput(ERessource.TURBOFUEL, 20),
@@ -155,7 +155,7 @@ PACKAGER_RECIPES = [
 		]
 	),
 	Recipe(
-		'Unpackage_Water',
+		'Unpackage Water',
 		inputs=[RecipeInput(ERessource.PACKAGED_WATER, 120)],
 		outputs=[
 			RecipeOutput(ERessource.WATER, 120),

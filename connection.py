@@ -73,7 +73,7 @@ class Connection:
                         pygame.draw.rect(screen, color, rect, border_top_left_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
                     case EOrientation.WEST:
                         pygame.draw.rect(screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
-        # middle
+        # center
         # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
 
     def collide(self, rel):
