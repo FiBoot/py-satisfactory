@@ -79,7 +79,7 @@ class Connection:
         # center
         # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
         if self.component and self.let == EConnectionLet.OUTLET:
-            text = font.render(f'{self.component.quantity * self.build.ratio}', True, EColor.PROCESSED_FONT)
+            text = font.render(f'{self.component.quantity * self.build.ratio}', True, EColor.FLOATING)
             screen.blit(text, (start_pos[0], start_pos[1] - 10)) # TODO padding with orientation
 
 

@@ -15,8 +15,7 @@ class EColor:
     FONT = '#101010'
     OUTLET = '#00A6A6'
     INLET = '#FE5A1D'
-    PROCESSED_FONT = '#909090'
-    CONNECTION_LINE = '#C0C0C0'
+    FLOATING = '#C0C0C0'
 
 class EBuildType:
     PRODUCTION = 'Production'

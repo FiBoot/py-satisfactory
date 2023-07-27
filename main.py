@@ -176,6 +176,8 @@ while running:
         build.draw(screen, font)
     for build in constructed_builds:
         build.draw_connection_lines(screen)
+    for build in constructed_builds:
+        build.draw_ratio(screen, font)
 
     context_menu.draw(screen)
 

@@ -2,7 +2,7 @@
 import pygame
 import utils
 from icon import get_icon
-from enums import EScreen, EColor, EContextMenu
+from enums import EScreen, EColor, EContextMenu, EOrientation
 from connection import EConnection, EConnectionLet
 
 class EBuildColor:
@@ -18,6 +18,7 @@ def align_pos_on_grid(pos, shift):
 
 class Build:
     def __init__(self, type, size, pos, connections = [], shift = (0, 0)):
+        self.orientation = EOrientation.NORTH
         self.type = type
         self.size = size
         self.pos = (pos[0] + size[0] // 2, pos[1] + size[1] // 2)
@@ -48,6 +49,7 @@ class Build:
     def rotate(self):
         self.size = (self.size[1], self.size[0])
         self.shift = (self.shift[1], self.shift[0])
+        self.orientation = (self.orientation + 1) % 4
         for connection in self.connections:
             connection.rotate()
     
@@ -82,6 +84,19 @@ class Build:
             text_y = y - EContextMenu.FONT_SIZE + EScreen.PADDING // 2 if component.let == EConnectionLet.OUTLET else y + EScreen.COMPONENT_WIDTH
             screen.blit(text, (x + EScreen.PADDING // 4, text_y))
 
+    def draw_ratio(self, screen, font):
+        match self.orientation:
+            case EOrientation.NORTH:
+                pos = (self.grid_pos[0] + self.size[0] // 2 + EScreen.PADDING, self.grid_pos[1])
+            case EOrientation.EAST:
+                pos = (self.grid_pos[0], self.grid_pos[1] + self.size[1] // 2 + EScreen.PADDING)
+            case EOrientation.SOUTH:
+                pos = (self.grid_pos[0] - (self.size[0] // 2 + EScreen.COMPONENT_WIDTH + EScreen.PADDING), self.grid_pos[1])
+            case EOrientation.WEST:
+                pos = (self.grid_pos[0], self.grid_pos[1] - (self.size[1] // 2 + EScreen.COMPONENT_WIDTH // 2 + EScreen.PADDING))
+        text = font.render(f'{self.ratio * 100}%', True, EColor.FLOATING)
+        screen.blit(text, pos)
+
     def draw(self, screen, font):
         # build
         rect = pygame.Rect(self.start_pos[0], self.start_pos[1], self.size[0], self.size[1])
@@ -96,13 +111,13 @@ class Build:
             connection.draw(screen, font, self.grid_pos)
         # center
         # pygame.draw.circle(screen, 'red', self.grid_pos, 2)
-    
+
     def draw_connection_lines(self, screen):
         for connection in self.connections:
             if connection.connected_to and connection.let == EConnectionLet.OUTLET:
                 connection_start_pos = utils.add_pair(self.grid_pos, connection.pos)
                 connection_to_start_pos = utils.add_pair(connection.connected_to.build.grid_pos, connection.connected_to.pos)
-                pygame.draw.line(screen, EColor.CONNECTION_LINE, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
+                pygame.draw.line(screen, EColor.FLOATING, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
 
 
     def collide(self, rel):
@@ -129,8 +144,11 @@ class Build:
                             ratio = 1 if ratio > 1 else ratio 
                             break
                 ratios.append(ratio)
-            print(f'ratios: {ratios}\n') # TODO prendre le plus petit du tableau (function utils?)
-            self.ratio = 0.5
+            print(ratios)
+            min_ratio = ratios[0] if len(ratios) else 1
+            for ratio in ratios:
+                min_ratio = ratio if ratio < min_ratio else min_ratio
+            self.ratio = min_ratio
 
         # go up the chain
         for connection in self.connections:

@@ -5,7 +5,7 @@ from enums import EScreen, EColor, EContextMenu
 from connection import EConnectionLet, EConnectionType
 
 class RecipeComponent:
-    def __init__(self, ressource, quantity, let = EConnectionLet.OUTLET, type = EConnectionType.BELT): # TODO typer les recipes definitions
+    def __init__(self, ressource, quantity, let = EConnectionLet.OUTLET, type = EConnectionType.BELT): # TODO typer les recipes definitions BELT/PIPE
         self.ressource = ressource
         self.quantity = round(quantity, 1)
         self.let = let
