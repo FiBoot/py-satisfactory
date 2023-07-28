@@ -59,5 +59,3 @@ class EConnectionLet:
 class EConnectionType:
     BELT = 'BELT'
     PIPE = 'PIPE'
-
-LOGISTIC_LIST = [EConstruction.CONVEYOR_SPLITER, EConstruction.PIPE_SPLITER, EConstruction.CONVEYOR_MERGER, EConstruction.PIPE_MERGER]

@@ -8,8 +8,16 @@ class Logistic(Build):
     def __init__(self, type, pos, connections):
         Build.__init__(self, type, (40, 40), pos, connections)
 
+    def draw_ratio(self, screen, font):
+        pass
+
     def calc_ratio(self):
         self.ratio = 1
+
+
+class Splitter(Logistic):
+    def __init__(self, type, pos, connections):
+        Logistic.__init__(self, type, pos, connections)
 
     def calc_outputs(self):
         for connection in self.connections:
@@ -27,7 +35,17 @@ class Logistic(Build):
         for outputs in connected_outputs:
             outputs.component = RecipeOutput(input_component.ressource, input_component.quantity / len(connected_outputs))
 
-class ConveyorSpliter(Logistic):
+
+class Merger(Logistic):
+    def __init__(self, type, pos, connections):
+        Logistic.__init__(self, type, pos, connections)
+
+    def calc_outputs(self):
+        pass
+        # TODO
+
+
+class ConveyorSpliter(Splitter):
     def __init__(self, pos):
         connections = [
             BeltInlet(self, (0, 20), EOrientation.SOUTH),
@@ -35,9 +53,9 @@ class ConveyorSpliter(Logistic):
             BeltOutlet(self, (0, -20)),
             BeltOutlet(self, (20, 0), EOrientation.EAST),
         ]
-        Logistic.__init__(self, EConstruction.CONVEYOR_SPLITER, pos, connections)
+        Splitter.__init__(self, EConstruction.CONVEYOR_SPLITER, pos, connections)
 
-class ConveyorMerger(Logistic):
+class ConveyorMerger(Merger):
     def __init__(self, pos):
         connections = [
             BeltOutlet(self, (0, -20), EOrientation.NORTH),
@@ -45,9 +63,9 @@ class ConveyorMerger(Logistic):
             BeltInlet(self, (0, 20), EOrientation.SOUTH),
             BeltInlet(self, (-20, 0), EOrientation.WEST),
         ]
-        Logistic.__init__(self, EConstruction.CONVEYOR_MERGER, pos, connections)
+        Merger.__init__(self, EConstruction.CONVEYOR_MERGER, pos, connections)
 
-class PipeSpliter(Logistic):
+class PipeSpliter(Splitter):
     def __init__(self, pos):
         connections = [
             PipeInlet(self, (0, 20), EOrientation.SOUTH),
@@ -55,9 +73,9 @@ class PipeSpliter(Logistic):
             PipeOutlet(self, (0, -20)),
             PipeOutlet(self, (20, 0), EOrientation.EAST),
         ]
-        Logistic.__init__(self, EConstruction.PIPE_SPLITER, pos, connections)
+        Splitter.__init__(self, EConstruction.PIPE_SPLITER, pos, connections)
 
-class PipeMerger(Logistic):
+class PipeMerger(Merger):
     def __init__(self, pos):
         connections = [
             PipeOutlet(self, (0, -20), EOrientation.NORTH),
@@ -65,4 +83,4 @@ class PipeMerger(Logistic):
             PipeInlet(self, (0, 20), EOrientation.SOUTH),
             PipeInlet(self, (-20, 0), EOrientation.WEST),
         ]
-        Logistic.__init__(self, EConstruction.PIPE_MERGER, pos, connections)
+        Merger.__init__(self, EConstruction.PIPE_MERGER, pos, connections)

@@ -43,4 +43,3 @@ class SubContextMenuRecipe(ContextMenuBaseItem):
         text = font.render(self.text, True, EColor.FONT)
         screen.blit(text, (pos[0] + EScreen.PADDING, calc_y + EScreen.PADDING))
         self.recipe.draw(screen, font, pos, width + self.recipe_menu_width, index)
-

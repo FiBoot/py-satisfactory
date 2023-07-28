@@ -1,7 +1,7 @@
 import pygame
 import utils
 from icon import get_icon
-from enums import EScreen, EColor, EContextMenu, EOrientation, EConnection, EConnectionLet, LOGISTIC_LIST
+from enums import EScreen, EColor, EContextMenu, EOrientation, EConnection, EConnectionLet
 
 def align_pos_on_grid(pos, shift):
     gap = (pos[0] % EScreen.CELL_SIZE, pos[1] % EScreen.CELL_SIZE)
@@ -81,7 +81,6 @@ class Build:
             screen.blit(text, (x + EScreen.PADDING // 4, text_y))
 
     def draw_ratio(self, screen, font):
-        if self.type in LOGISTIC_LIST: return
         match self.orientation:
             case EOrientation.NORTH:
                 pos = (self.grid_pos[0] + self.size[0] // 2 + EScreen.PADDING, self.grid_pos[1])
@@ -152,7 +151,6 @@ class Build:
                 connection.connected_to.build.process(level + 1)
 
     def find_start(self, level = 1):
-        print(f'level {level}')
         inlet_count = 0
         for connection in self.connections:
             if connection.let == EConnectionLet.INLET:
