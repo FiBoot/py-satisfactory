@@ -1,8 +1,7 @@
 import pygame
 import utils
-from data import EConstruction
-from enums import EColor, EOrientation, EConnection, EConnectionLet, EConnectionType, LOGISTIC_LIST
-from recipe import RecipeOutput
+from enums import EColor, EOrientation, EConnection, EConnectionLet, EConnectionType
+
 
 def rect_by_orientation(pos, orientation, size):
    match orientation:
@@ -17,6 +16,13 @@ def rect_by_orientation(pos, orientation, size):
            pos = (pos[0] + size // 2, pos[1])
            size = (size // 2, size)
    return pygame.Rect(pos, size)
+
+def reset_connection(connection):
+    if connection:
+        if connection.connected_to:
+            connection.connected_to.component = None
+        connection.connected_to = None
+        connection.build.process()
 
 
 class Connection:
@@ -37,43 +43,19 @@ class Connection:
         self.pos = (-self.pos[1], self.pos[0])
         self.orientation = (self.orientation + 1) % 4
 
-    def connect_splitter(self, splitter):
-        input_component = None
-        connected_outputs = []
-        for connection in splitter.connections:
-            if connection.let == EConnectionLet.INLET:
-                if connection.connected_to:
-                    input_component = connection.connected_to.component
-                else:
-                    print('no inlet, exiting')
-                    return
-            if connection.let == EConnectionLet.OUTLET and connection.connected_to != None:
-                connected_outputs.append(connection)
-        for outputs in connected_outputs:
-            outputs.component = RecipeOutput(input_component.ressource, input_component.quantity / len(connected_outputs))
-
-    def connect_special_case(self, build):
-        match build.type:
-            case EConstruction.CONVEYOR_SPLITER | EConstruction.PIPE_SPLITER:
-                self.connect_splitter(build)
-            case EConstruction.CONVEYOR_MERGER | EConstruction.PIPE_MERGER:
-                pass
+    def reset_connection(self):
+        reset_connection(self.connected_to)
+        reset_connection(self)
 
     def try_connect(self, connection):
         if connection.let != self.let and connection.type == self.type:
+            connection.reset_connection()
             if self.connected_to != None:
-                self.connected_to.build.find_start_build()
-                self.connected_to.connected_to = None
-            if connection.connected_to != None:
-                connection.connected_to.connected_to = None
+                self.connected_to.reset_connection()
             self.connected_to = connection
             connection.connected_to = self
-            # special case splitter/merger
-            self.connect_special_case(self.build)
-            self.connect_special_case(connection.build)
             # start diggin
-            self.build.find_start_build()
-            self.build.process()
+            self.build.find_start()
 
     def draw(self, screen, font, build_pos):
         color = EColor.OUTLET if self.let == EConnectionLet.OUTLET else EColor.INLET
@@ -95,9 +77,8 @@ class Connection:
         # center
         # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
         if self.component and self.let == EConnectionLet.OUTLET:
-            text = font.render(f'{self.component.quantity * self.build.ratio}', True, EColor.FLOATING)
+            text = font.render(f'{round(self.component.quantity * self.build.ratio, 2)}', True, EColor.FLOATING)
             screen.blit(text, (start_pos[0], start_pos[1] - 10)) # TODO padding with orientation
-
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + EConnection.SIZE and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + EConnection.SIZE

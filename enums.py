@@ -2,8 +2,8 @@ from data import *
 
 class EScreen:
     FPS = 60
-    WIDTH = 1600
-    HEIGHT = 900
+    WIDTH = 800
+    HEIGHT = 800
     CELL_SIZE = 10
     PADDING = 10
     COMPONENT_WIDTH = 20

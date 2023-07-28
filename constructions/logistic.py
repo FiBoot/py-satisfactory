@@ -1,17 +1,31 @@
 from build import Build
 from data import EConstruction
-from enums import EOrientation
+from enums import EOrientation, EConnectionLet
 from connection import BeltOutlet, BeltInlet, PipeOutlet, PipeInlet
+from recipe import RecipeOutput
 
 class Logistic(Build):
     def __init__(self, type, pos, connections):
         Build.__init__(self, type, (40, 40), pos, connections)
 
-    def process(self, level = 0):
-        print(f'calculating ratio {self.type} ({level})')
+    def calc_ratio(self):
         self.ratio = 1
-        
-        
+
+    def calc_outputs(self):
+        for connection in self.connections:
+            # we dont care about input component because we only care about the linked connection output value
+            connection.component = None
+        input_component = None
+        connected_outputs = []
+        for connection in self.connections:
+            if connection.let == EConnectionLet.INLET:
+                if connection.connected_to:
+                    # only 1 input in splitter
+                    input_component = connection.connected_to.component
+            if connection.let == EConnectionLet.OUTLET and connection.connected_to != None:
+                connected_outputs.append(connection)
+        for outputs in connected_outputs:
+            outputs.component = RecipeOutput(input_component.ressource, input_component.quantity / len(connected_outputs))
 
 class ConveyorSpliter(Logistic):
     def __init__(self, pos):

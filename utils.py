@@ -14,7 +14,6 @@ def calc_menu_width(menu_items, min_width, char_width):
 def calc_recipe_menu_width(recipe_list, component_width):
     max_length = 0
     for recipe in recipe_list:
-        print(recipe)
         new_length = len(recipe.inputs) + len(recipe.outputs)
         max_length = new_length if new_length > max_length else max_length
     return max_length * component_width * 2 # component + text

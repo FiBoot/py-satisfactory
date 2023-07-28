@@ -181,7 +181,6 @@ while running:
 
     context_menu.draw(screen)
 
-
     # display
     pygame.display.flip()
     # limit fps

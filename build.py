@@ -23,9 +23,6 @@ class Build:
         self.recipe = None
         self.ratio = 0
 
-    def __str__(self):
-        return f'{self.type} {self.pos}'
-    
     @property
     def start_pos(self):
         return (self.grid_pos[0] - self.size[0] // 2, self.grid_pos[1] - self.size[1] // 2)
@@ -46,17 +43,22 @@ class Build:
         self.orientation = (self.orientation + 1) % 4
         for connection in self.connections:
             connection.rotate()
+
+    def calc_outputs(self):
+        for connection in self.connections:
+            # we dont care about input component because we only care about the linked connection output value
+            connection.component = None
+        if self.recipe != None:
+            for output in self.recipe.outputs:
+                for connection in self.connections:
+                    if connection.component == None and connection.let == output.let: # TODO if con.type == input.type
+                        connection.component = output
+                        break
     
     def set_recipe(self, recipe):
-        for connection in self.connections:
-            connection.component = None
         self.recipe = recipe
-        for output in recipe.outputs:
-            for connection in self.connections:
-                if connection.component == None and connection.let == output.let: # TODO if con.type == input.type
-                    connection.component = output
-                    break
-        self.find_start_build()
+        self.calc_outputs()
+        self.find_start()
 
     def draw_recipe_component(self, screen, font, components):
         offsets = [
@@ -89,7 +91,7 @@ class Build:
                 pos = (self.grid_pos[0] - (self.size[0] // 2 + EScreen.COMPONENT_WIDTH + EScreen.PADDING), self.grid_pos[1])
             case EOrientation.WEST:
                 pos = (self.grid_pos[0], self.grid_pos[1] - (self.size[1] // 2 + EScreen.COMPONENT_WIDTH // 2 + EScreen.PADDING))
-        text = font.render(f'{self.ratio * 100}%', True, EColor.FLOATING)
+        text = font.render(f'{round(self.ratio * 100)}%', True, EColor.FLOATING)
         screen.blit(text, pos)
 
     def draw(self, screen, font):
@@ -114,7 +116,6 @@ class Build:
                 connection_to_start_pos = utils.add_pair(connection.connected_to.build.grid_pos, connection.connected_to.pos)
                 pygame.draw.line(screen, EColor.FLOATING, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
 
-
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + self.size[0] and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + self.size[1]
 
@@ -124,36 +125,41 @@ class Build:
             if connection.collide(inside_pos):
                 return connection
         return None
-
-    def process(self, level = 0):
+    
+    def calc_ratio(self):
         if self.recipe != None:
-            print(f'calculating ratio {self.type} ({level})')
-            # calc ratio
             ratios = []
             for input in self.recipe.inputs:
                 ratio = 0
                 for connection in self.connections:
                     if connection.let == EConnectionLet.INLET:
-                        if connection.connected_to != None and connection.connected_to.component.ressource == input.ressource:
-                            ratio = connection.connected_to.component.quantity / input.quantity
-                            ratio = 1 if ratio > 1 else ratio 
+                        if connection.connected_to != None and connection.connected_to.component != None and connection.connected_to.component.ressource == input.ressource:
+                            ratio = connection.connected_to.component.quantity * connection.connected_to.build.ratio / input.quantity
+                            ratio = 1 if ratio > 1 else ratio
                             break
                 ratios.append(ratio)
-            print(ratios)
             min_ratio = ratios[0] if len(ratios) else 1
             for ratio in ratios:
                 min_ratio = ratio if ratio < min_ratio else min_ratio
-            self.ratio = round(min_ratio, 1)
+            self.ratio = min_ratio
 
+    def process(self, level = 0):
+        self.calc_outputs()
+        self.calc_ratio()
         # go up the chain
         for connection in self.connections:
             if connection.let == EConnectionLet.OUTLET and connection.connected_to:
                 connection.connected_to.build.process(level + 1)
 
-    def find_start_build(self):
-        if self.recipe != None:
-            if self.recipe.inputs == []:
-                return self.process() # start to go up
-            for connection in self.connections:
-                if connection.let == EConnectionLet.INLET and connection.connected_to != None:
-                    connection.connected_to.build.find_start_build() # we go deeper
+    def find_start(self, level = 1):
+        print(f'level {level}')
+        inlet_count = 0
+        for connection in self.connections:
+            if connection.let == EConnectionLet.INLET:
+                inlet_count += 1
+                if connection.connected_to != None:
+                    connection.connected_to.build.find_start(level + 1) # we go deeper
+                else:
+                    self.process(level) # start to go up
+        if inlet_count == 0:
+            self.process(level) # start to go up
