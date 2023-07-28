@@ -11,16 +11,22 @@ class EConstruction:
     BLENDER = 'Blender'
     PARTICULE_ACCELERATOR = 'Particule Accelerator'
     # logistic
-    CONVEYORSPLITER = 'Conveyor Spliter'
-    CONVEYORMERGER = 'Conveyor Merger'
+    CONVEYOR_SPLITER = 'Conveyor Spliter'
+    CONVEYOR_MERGER = 'Conveyor Merger'
+    PIPE_SPLITER = 'Pipe Spliter'
+    PIPE_MERGER = 'Pipe Merger'
     # extractor
-    MINERMK1 = 'Miner Mk.1'
-    MINERMK2 = 'Miner Mk.2'
-    MINERMK3 = 'Miner Mk.3'
-    OILEXTRACTOR = 'Oil Extractor'
-    WATEREXTRACTOR = 'Water Extractor'
-    RESSOURCEWELLPRESSURIZER = 'Ressource-well Pressurizer'
-    RESSOURCEWELLEXTRACTOR = 'Ressource-well Extractor'
+    MINER_MK1 = 'Miner Mk.1'
+    MINER_MK2 = 'Miner Mk.2'
+    MINER_MK3 = 'Miner Mk.3'
+    OIL_EXTRACTOR = 'Oil Extractor'
+    WATER_EXTRACTOR = 'Water Extractor'
+    RESSOURCEWELL_PRESSURIZER = 'Ressource-well Pressurizer'
+    RESSOURCEWELL_EXTRACTOR = 'Ressource-well Extractor'
+    # generator
+    COAL_GENERATOR = 'Coal Generator'
+    FUEL_GENERATOR = 'Fuel Generator'
+    NUCLEAR_POWER_PLANT = 'Nuclear Power Plant'
 
 class ERessource:
     UNKNOW = 'Not Found'

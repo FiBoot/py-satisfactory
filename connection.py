@@ -1,18 +1,8 @@
 import pygame
 import utils
-from enums import EOrientation, EColor
-
-class EConnection:
-    SIZE = 20
-    LINE_THICKNESS = 5
-
-class EConnectionLet:
-    OUTLET = 'OUTLET'
-    INLET = 'INLET'
-
-class EConnectionType:
-    BELT = 'BELT'
-    PIPE = 'PIPE'
+from data import EConstruction
+from enums import EColor, EOrientation, EConnection, EConnectionLet, EConnectionType, LOGISTIC_LIST
+from recipe import RecipeOutput
 
 def rect_by_orientation(pos, orientation, size):
    match orientation:
@@ -47,14 +37,40 @@ class Connection:
         self.pos = (-self.pos[1], self.pos[0])
         self.orientation = (self.orientation + 1) % 4
 
+    def connect_splitter(self, splitter):
+        input_component = None
+        connected_outputs = []
+        for connection in splitter.connections:
+            if connection.let == EConnectionLet.INLET:
+                if connection.connected_to:
+                    input_component = connection.connected_to.component
+                else:
+                    print('no inlet, exiting')
+                    return
+            if connection.let == EConnectionLet.OUTLET and connection.connected_to != None:
+                connected_outputs.append(connection)
+        for outputs in connected_outputs:
+            outputs.component = RecipeOutput(input_component.ressource, input_component.quantity / len(connected_outputs))
+
+    def connect_special_case(self, build):
+        match build.type:
+            case EConstruction.CONVEYOR_SPLITER | EConstruction.PIPE_SPLITER:
+                self.connect_splitter(build)
+            case EConstruction.CONVEYOR_MERGER | EConstruction.PIPE_MERGER:
+                pass
+
     def try_connect(self, connection):
         if connection.let != self.let and connection.type == self.type:
             if self.connected_to != None:
+                self.connected_to.build.find_start_build()
                 self.connected_to.connected_to = None
             if connection.connected_to != None:
                 connection.connected_to.connected_to = None
             self.connected_to = connection
             connection.connected_to = self
+            # special case splitter/merger
+            self.connect_special_case(self.build)
+            self.connect_special_case(connection.build)
             # start diggin
             self.build.find_start_build()
             self.build.process()

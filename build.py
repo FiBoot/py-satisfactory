@@ -1,13 +1,7 @@
-
 import pygame
 import utils
 from icon import get_icon
-from enums import EScreen, EColor, EContextMenu, EOrientation
-from connection import EConnection, EConnectionLet
-
-class EBuildColor:
-    BASE = '#AD9D5C'
-    SELECTED = '#D0E1D4'
+from enums import EScreen, EColor, EContextMenu, EOrientation, EConnection, EConnectionLet, LOGISTIC_LIST
 
 def align_pos_on_grid(pos, shift):
     gap = (pos[0] % EScreen.CELL_SIZE, pos[1] % EScreen.CELL_SIZE)
@@ -85,6 +79,7 @@ class Build:
             screen.blit(text, (x + EScreen.PADDING // 4, text_y))
 
     def draw_ratio(self, screen, font):
+        if self.type in LOGISTIC_LIST: return
         match self.orientation:
             case EOrientation.NORTH:
                 pos = (self.grid_pos[0] + self.size[0] // 2 + EScreen.PADDING, self.grid_pos[1])
@@ -100,7 +95,7 @@ class Build:
     def draw(self, screen, font):
         # build
         rect = pygame.Rect(self.start_pos[0], self.start_pos[1], self.size[0], self.size[1])
-        color = EBuildColor.SELECTED if self.selected else EBuildColor.BASE
+        color = EColor.SELECTED_BUILD if self.selected else EColor.BASE_BUILD
         pygame.draw.rect(screen, color, rect)
         # draw recipe components
         if self.recipe:
@@ -148,7 +143,7 @@ class Build:
             min_ratio = ratios[0] if len(ratios) else 1
             for ratio in ratios:
                 min_ratio = ratio if ratio < min_ratio else min_ratio
-            self.ratio = min_ratio
+            self.ratio = round(min_ratio, 1)
 
         # go up the chain
         for connection in self.connections:

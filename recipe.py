@@ -1,4 +1,3 @@
-import pygame
 import utils
 from icon import get_icon
 from enums import EScreen, EColor, EContextMenu
@@ -19,7 +18,7 @@ class RecipeInput(RecipeComponent):
         RecipeComponent.__init__(self, ressource, quantity, EConnectionLet.INLET)
 
 class Recipe:
-    def __init__(self, name, outputs, inputs = []):
+    def __init__(self, name, outputs = [], inputs = []):
         self.name = name
         self.inputs = inputs
         self.outputs = outputs

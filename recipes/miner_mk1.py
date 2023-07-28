@@ -1,7 +1,7 @@
 from data import ERessource
 from recipe import Recipe, RecipeOutput
 
-MINERMK1_RECIPES = [
+MINER_MK1_RECIPES = [
     Recipe('Iron Ore Impure', outputs=[RecipeOutput(ERessource.IRON_ORE, 30)]),
     Recipe('Iron Ore Normal', outputs=[RecipeOutput(ERessource.IRON_ORE, 60)]),
     Recipe('Iron Ore Pure', outputs=[RecipeOutput(ERessource.IRON_ORE, 120)]),

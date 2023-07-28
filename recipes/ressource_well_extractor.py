@@ -1,7 +1,7 @@
 from data import ERessource
 from recipe import Recipe, RecipeOutput
 
-RESSOURCEWELLEXTRACTOR_RECIPES = [
+RESSOURCEWELL_EXTRACTOR_RECIPES = [
     Recipe('Nitrogen Gas', outputs=[RecipeOutput(ERessource.NITROGEN_GAS, 30)]),
     Recipe('Nitrogen Gas', outputs=[RecipeOutput(ERessource.NITROGEN_GAS, 60)]),
     Recipe('Nitrogen Gas', outputs=[RecipeOutput(ERessource.NITROGEN_GAS, 120)]),
