@@ -1,6 +1,6 @@
 import pygame
 import utils
-from enums import EColor, EOrientation, EConnection, EConnectionLet, EConnectionType
+from enums import EScreen, EColor, EOrientation, EConnection, EConnectionLet, EConnectionType
 
 
 def rect_by_orientation(pos, orientation, size):
@@ -59,7 +59,7 @@ class Connection:
 
     def draw(self, screen, font, build_pos):
         color = EColor.OUTLET if self.let == EConnectionLet.OUTLET else EColor.INLET
-        start_pos = utils.add_pair(build_pos, self.start_pos)
+        start_pos = utils.add_pair(self.start_pos, build_pos)
         rect = rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
         match self.type:
             case EConnectionType.BELT:
@@ -75,10 +75,21 @@ class Connection:
                     case EOrientation.WEST:
                         pygame.draw.rect(screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
         # center
-        # pygame.draw.circle(screen, 'purple', utils.add_pair(self.pos, build_pos), 2)
+        center_pos = utils.add_pair(self.pos, build_pos)
+        pygame.draw.circle(screen, 'purple', center_pos, 2)
+        # output text
         if self.component and self.let == EConnectionLet.OUTLET:
-            text = font.render(f'{round(self.component.quantity * self.build.ratio, 2)}', True, EColor.FLOATING)
-            screen.blit(text, (start_pos[0], start_pos[1] - 10)) # TODO padding with orientation
+            text = font.render(f'{round(self.component.quantity * self.build.ratio, 2)}', True, EColor.FLOATING_TEXT)
+            match self.orientation:
+                case EOrientation.NORTH:
+                    text_pos = (center_pos[0] - EScreen.PADDING // 2, center_pos[1] - EScreen.FONT_SIZE)
+                case EOrientation.EAST:
+                    text_pos = (center_pos[0] + EScreen.FONT_SIZE // 2, center_pos[1] - EScreen.PADDING // 2)
+                case EOrientation.SOUTH:
+                    text_pos = (center_pos[0] - EScreen.PADDING // 2, center_pos[1] + EScreen.FONT_SIZE // 2)
+                case EOrientation.WEST:
+                    text_pos = (center_pos[0] - EScreen.FONT_SIZE, center_pos[1] - EScreen.PADDING // 2)
+            screen.blit(text, text_pos)
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + EConnection.SIZE and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + EConnection.SIZE

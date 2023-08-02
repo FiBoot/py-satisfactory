@@ -30,6 +30,7 @@ class Build:
     def delete(self):
         for connection in self.connections:
             if connection.connected_to:
+                connection.connected_to.build.find_start()
                 connection.connected_to.connected_to = None
             del connection
 
@@ -77,7 +78,7 @@ class Build:
             screen.blit(icon, (x, y))
             # text
             text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
-            text_y = y - EContextMenu.FONT_SIZE + EScreen.PADDING // 2 if component.let == EConnectionLet.OUTLET else y + EScreen.COMPONENT_WIDTH
+            text_y = y - EScreen.FONT_SIZE + EScreen.PADDING // 2 if component.let == EConnectionLet.OUTLET else y + EScreen.COMPONENT_WIDTH
             screen.blit(text, (x + EScreen.PADDING // 4, text_y))
 
     def draw_ratio(self, screen, font):
@@ -90,7 +91,7 @@ class Build:
                 pos = (self.grid_pos[0] - (self.size[0] // 2 + EScreen.COMPONENT_WIDTH + EScreen.PADDING), self.grid_pos[1])
             case EOrientation.WEST:
                 pos = (self.grid_pos[0], self.grid_pos[1] - (self.size[1] // 2 + EScreen.COMPONENT_WIDTH // 2 + EScreen.PADDING))
-        text = font.render(f'{round(self.ratio * 100)}%', True, EColor.FLOATING)
+        text = font.render(f'{round(self.ratio * 100)}%', True, EColor.FLOATING_TEXT)
         screen.blit(text, pos)
 
     def draw(self, screen, font):
@@ -113,7 +114,7 @@ class Build:
             if connection.connected_to and connection.let == EConnectionLet.OUTLET:
                 connection_start_pos = utils.add_pair(self.grid_pos, connection.pos)
                 connection_to_start_pos = utils.add_pair(connection.connected_to.build.grid_pos, connection.connected_to.pos)
-                pygame.draw.line(screen, EColor.FLOATING, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
+                pygame.draw.line(screen, EColor.CONNECTION_LINE, connection_start_pos, connection_to_start_pos, EConnection.LINE_THICKNESS)
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + self.size[0] and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + self.size[1]

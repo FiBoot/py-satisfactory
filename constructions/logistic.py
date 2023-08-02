@@ -41,8 +41,18 @@ class Merger(Logistic):
         Logistic.__init__(self, type, pos, connections)
 
     def calc_outputs(self):
-        pass
-        # TODO
+        output_component = None
+        outlet = None
+        for connection in self.connections:
+            if connection.let == EConnectionLet.INLET and connection.connected_to and connection.connected_to.component:
+                if output_component != None:
+                    if output_component.ressource == connection.connected_to.component.ressource:
+                       output_component.quantity += connection.connected_to.component.quantity
+                    else: print(f'CEST PAS LE MEME COMPONENT zut de flute {output_component.ressource}!={connection.connected_to.component.ressource}')
+                else: output_component = RecipeOutput(connection.connected_to.component.ressource, connection.connected_to.component.quantity)
+            elif connection.let == EConnectionLet.OUTLET:
+                outlet = connection
+        outlet.component = output_component
 
 
 class ConveyorSpliter(Splitter):

@@ -11,7 +11,7 @@ from enums import *
 pygame.init()
 pygame.font.init()
 screen = pygame.display.set_mode((EScreen.WIDTH + 1, EScreen.HEIGHT + 1))
-font = pygame.font.SysFont(None, EContextMenu.FONT_SIZE)
+font = pygame.font.SysFont(None, EScreen.FONT_SIZE)
 clock = pygame.time.Clock()
 context_menu = ContextMenu(font)
 
