@@ -1,7 +1,10 @@
 from data import *
 
-class EScreen:
+class EConfig:
     FPS = 60
+    GC_TIMEOUT = 600 # in frames
+
+class EScreen:
     WIDTH = 1200
     HEIGHT = 800
     CELL_SIZE = 10

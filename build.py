@@ -27,12 +27,21 @@ class Build:
     def start_pos(self):
         return (self.grid_pos[0] - self.size[0] // 2, self.grid_pos[1] - self.size[1] // 2)
 
-    def delete(self):
+    def disconnect(self):
         for connection in self.connections:
-            if connection.connected_to:
-                connection.connected_to.build.find_start()
-                connection.connected_to.connected_to = None
-            del connection
+            connection.disconnect()
+
+    def copy(self):
+        connections = []
+        # copy connections
+        for connection in self.connections:
+            connections.append(connection.copy())
+        build = Build(self.type, self.size, self.pos, connections, self.shift)
+        build.recipe = self.recipe
+        # assign copied connection to their true own build
+        for connection in build.connections:
+            connection.build = build
+        return build
 
     def move(self, rel):
         self.pos = utils.add_pair(self.pos, rel)
@@ -143,22 +152,31 @@ class Build:
                 min_ratio = ratio if ratio < min_ratio else min_ratio
             self.ratio = min_ratio
 
-    def process(self, level = 0):
-        self.calc_outputs()
-        self.calc_ratio()
-        # go up the chain
-        for connection in self.connections:
-            if connection.let == EConnectionLet.OUTLET and connection.connected_to:
-                connection.connected_to.build.process(level + 1)
+    def process_r(self, stack = []):
+        if not utils.contains(self, stack):
+            stack.append(self)
+            self.calc_outputs()
+            self.calc_ratio()
+            # go up the chain
+            for connection in self.connections:
+                if connection.let == EConnectionLet.OUTLET and connection.connected_to:
+                    connection.connected_to.build.process_r(stack)
+    
+    def process(self):
+        self.process_r([])
 
-    def find_start(self, level = 1):
-        inlet_count = 0
-        for connection in self.connections:
-            if connection.let == EConnectionLet.INLET:
-                inlet_count += 1
-                if connection.connected_to != None:
-                    connection.connected_to.build.find_start(level + 1) # we go deeper
-                else:
-                    self.process(level) # start to go up
-        if inlet_count == 0:
-            self.process(level) # start to go up
+    def find_start_r(self, stack = []):
+        print(stack, self.type)
+        if not utils.contains(self, stack):
+            stack.append(self)
+            connected = False
+            for connection in self.connections:
+                if connection.let == EConnectionLet.INLET and connection.connected_to != None:
+                    connected = True
+                    connection.connected_to.build.find_start_r(stack) # we go deeper
+            if not connected:
+                self.process() # start to go up
+
+    def find_start(self):
+        print('\nstart')
+        self.find_start_r([])

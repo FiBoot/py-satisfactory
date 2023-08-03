@@ -17,13 +17,6 @@ def rect_by_orientation(pos, orientation, size):
            size = (size // 2, size)
    return pygame.Rect(pos, size)
 
-def reset_connection(connection):
-    if connection:
-        if connection.connected_to:
-            connection.connected_to.component = None
-        connection.connected_to = None
-        connection.build.process()
-
 
 class Connection:
     def __init__(self, build, pos, orientation = EOrientation.NORTH, let = EConnectionLet.OUTLET, type = EConnectionType.BELT):
@@ -35,6 +28,11 @@ class Connection:
         self.connected_to = None
         self.component = None
 
+    def copy(self):
+        connection = Connection(self.build, self.pos, self.orientation, self.let, self.type)
+        print(f'creating new connection {connection} ({self})')
+        return connection
+
     @property
     def start_pos(self):
         return utils.sub_pair(self.pos, (EConnection.SIZE // 2, EConnection.SIZE // 2))
@@ -43,15 +41,20 @@ class Connection:
         self.pos = (-self.pos[1], self.pos[0])
         self.orientation = (self.orientation + 1) % 4
 
-    def reset_connection(self):
-        reset_connection(self.connected_to)
-        reset_connection(self)
+    def disconnect(self):
+        def unlink(connection):
+            if connection:
+                if connection.connected_to:
+                    connection.connected_to.build.find_start()
+                    connection.connected_to.component = None
+                connection.connected_to = None
+        unlink(self.connected_to)
+        unlink(self)
 
     def try_connect(self, connection):
         if connection.let != self.let and connection.type == self.type:
-            connection.reset_connection()
-            if self.connected_to != None:
-                self.connected_to.reset_connection()
+            connection.disconnect()
+            self.disconnect()
             self.connected_to = connection
             connection.connected_to = self
             # start diggin

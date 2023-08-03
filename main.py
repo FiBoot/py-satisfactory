@@ -1,11 +1,12 @@
+import gc
 import pygame
 import copy
 import utils
+from enums import *
 from constructions.list import CONSTRUCTION_LIST
 from recipes.list import RECIPE_LIST
 from context_menu import ContextMenu
 from context_menu_item import ContextMenuBaseItem, SubContextMenuItem, SubContextMenuRecipe
-from enums import *
 
 # pygame setup
 pygame.init()
@@ -32,7 +33,7 @@ def rotate_build(rel, build):
 
 def delete_building(rel, build):
     constructed_builds.remove(build)
-    build.delete()
+    build.disconnect()
     del build
 
 def select_recip(rel, args):
@@ -89,7 +90,10 @@ def draw_grid(screen):
         pygame.draw.line(screen, color, (0, i * EScreen.CELL_SIZE), (EScreen.WIDTH, i * EScreen.CELL_SIZE))
 
 
+print('gc threshold')
+print(gc.get_threshold())
 # main loop
+frame = 0
 running = True
 while running:
     
@@ -113,9 +117,9 @@ while running:
                 if pressed_keys[pygame.K_c]:
                     build = collide_build(pygame.mouse.get_pos(), constructed_builds)
                     if build:
-                        clipboard = copy.deepcopy(build)
+                        clipboard = build.copy()
                 if pressed_keys[pygame.K_v] and clipboard:
-                    new_build = copy.deepcopy(clipboard)
+                    new_build = clipboard.copy()
                     new_build.pos = pygame.mouse.get_pos()
                     new_build.move((0, 0))
                     constructed_builds.append(new_build)
@@ -184,6 +188,11 @@ while running:
     # display
     pygame.display.flip()
     # limit fps
-    clock.tick(EScreen.FPS)
+    clock.tick(EConfig.FPS)
+
+    if frame % EConfig.GC_TIMEOUT == 0:
+        gc.collect()
+
+    frame += 1
 
 pygame.quit()

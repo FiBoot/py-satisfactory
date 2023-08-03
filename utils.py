@@ -20,3 +20,10 @@ def calc_recipe_menu_width(recipe_list, component_width):
     
 def log(title, arg):
     print(f'{title}: {arg}\n')
+
+def contains(item, list):
+    try:
+        list.index(item)
+        return True
+    except ValueError:
+        return False

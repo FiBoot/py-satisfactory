@@ -23,17 +23,23 @@ class Splitter(Logistic):
         for connection in self.connections:
             # we dont care about input component because we only care about the linked connection output value
             connection.component = None
-        input_component = None
+        splitter_input = None
         connected_outputs = []
         for connection in self.connections:
             if connection.let == EConnectionLet.INLET:
                 if connection.connected_to:
                     # only 1 input in splitter
-                    input_component = connection.connected_to.component
+                    splitter_input = connection.connected_to
             if connection.let == EConnectionLet.OUTLET and connection.connected_to != None:
                 connected_outputs.append(connection)
-        for outputs in connected_outputs:
-            outputs.component = RecipeOutput(input_component.ressource, input_component.quantity / len(connected_outputs))
+        if len(connected_outputs):
+            if splitter_input and splitter_input.component :
+                outputed_quantity = splitter_input.component.quantity * splitter_input.build.ratio / len(connected_outputs)
+                for outputs in connected_outputs:
+                    outputs.component = RecipeOutput(splitter_input.component.ressource, outputed_quantity)
+            else:
+                for outputs in connected_outputs:
+                    outputs.component = None
 
 
 class Merger(Logistic):
@@ -48,7 +54,6 @@ class Merger(Logistic):
                 if output_component != None:
                     if output_component.ressource == connection.connected_to.component.ressource:
                        output_component.quantity += connection.connected_to.component.quantity
-                    else: print(f'CEST PAS LE MEME COMPONENT zut de flute {output_component.ressource}!={connection.connected_to.component.ressource}')
                 else: output_component = RecipeOutput(connection.connected_to.component.ressource, connection.connected_to.component.quantity)
             elif connection.let == EConnectionLet.OUTLET:
                 outlet = connection
