@@ -29,9 +29,7 @@ class Connection:
         self.component = None
 
     def copy(self):
-        connection = Connection(self.build, self.pos, self.orientation, self.let, self.type)
-        print(f'creating new connection {connection} ({self})')
-        return connection
+        return  Connection(self.build, self.pos, self.orientation, self.let, self.type)
 
     @property
     def start_pos(self):

@@ -1,6 +1,5 @@
 import gc
 import pygame
-import copy
 import utils
 from enums import *
 from constructions.list import CONSTRUCTION_LIST
