@@ -14,6 +14,18 @@ class Logistic(Build):
     def calc_ratio(self):
         self.ratio = 1
 
+    def parent_copy(self, logistic_class):
+        connections = []
+        # copy connections
+        for connection in self.connections:
+            connections.append(connection.copy())
+        new_logistic = logistic_class(self.type, self.pos, connections)
+        # assign copied connection to their true own build
+        for connection in new_logistic.connections:
+            connection.build = new_logistic
+        return new_logistic
+
+
 
 class Splitter(Logistic):
     def __init__(self, type, pos, connections):
@@ -42,9 +54,7 @@ class Splitter(Logistic):
                     outputs.component = None
     
     def copy(self):
-        print('copy splitter')
-        pass
-
+        return self.parent_copy(Splitter)
 
 class Merger(Logistic):
     def __init__(self, type, pos, connections):
@@ -64,9 +74,7 @@ class Merger(Logistic):
         outlet.component = output_component
 
     def copy(self):
-        print('copy merger')
-        pass
-
+        return self.parent_copy(Merger)
 
 
 class ConveyorSpliter(Splitter):

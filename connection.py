@@ -13,7 +13,7 @@ class Connection:
         self.component = None
 
     def copy(self):
-        return  Connection(self.build, self.pos, self.orientation, self.let, self.type)
+        return Connection(self.build, self.pos, self.orientation, self.let, self.type)
 
     @property
     def start_pos(self):
