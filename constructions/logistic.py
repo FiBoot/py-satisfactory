@@ -8,7 +8,7 @@ class Logistic(Build):
     def __init__(self, type, pos, connections):
         Build.__init__(self, type, (40, 40), pos, connections)
 
-    def draw_ratio(self, screen, font):
+    def draw_ratio(self, GR):
         pass
 
     def calc_ratio(self):
@@ -40,6 +40,10 @@ class Splitter(Logistic):
             else:
                 for outputs in connected_outputs:
                     outputs.component = None
+    
+    def copy(self):
+        print('copy splitter')
+        pass
 
 
 class Merger(Logistic):
@@ -53,11 +57,16 @@ class Merger(Logistic):
             if connection.let == EConnectionLet.INLET and connection.connected_to and connection.connected_to.component:
                 if output_component != None:
                     if output_component.ressource == connection.connected_to.component.ressource:
-                       output_component.quantity += connection.connected_to.component.quantity
-                else: output_component = RecipeOutput(connection.connected_to.component.ressource, connection.connected_to.component.quantity)
+                       output_component.quantity += connection.connected_to.component.quantity * connection.connected_to.build.ratio
+                else: output_component = RecipeOutput(connection.connected_to.component.ressource, connection.connected_to.component.quantity * connection.connected_to.build.ratio)
             elif connection.let == EConnectionLet.OUTLET:
                 outlet = connection
         outlet.component = output_component
+
+    def copy(self):
+        print('copy merger')
+        pass
+
 
 
 class ConveyorSpliter(Splitter):

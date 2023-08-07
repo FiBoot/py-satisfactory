@@ -6,8 +6,7 @@ class EContextMenuType:
     SUB = 'SUB'
 
 class ContextMenu:
-    def __init__(self, font):
-        self.font = font
+    def __init__(self):
         self.items = []
         self.sub_menu = None
         self.displayed = False
@@ -36,17 +35,17 @@ class ContextMenu:
                 if item.collide(self.pos, self.width, rel, index):
                     match item.type:
                         case EContextMenuType.BASE:
-                            item.callback(self.pos, item.arg)
+                            item.callback(rel, item.args) if item.args else item.callback(rel)
                             return False
                         case EContextMenuType.SUB:
-                            self.sub_menu = ContextMenu(self.font)
+                            self.sub_menu = ContextMenu()
                             self.sub_menu.open(rel, item.sub_items)
                             return True
         return False
 
-    def draw(self, screen):
+    def draw(self, GR):
         if self.displayed:
             for index, item in enumerate(self.items):
-                item.draw(screen, self.font, self.pos, self.width, index)
+                item.draw(GR, self.pos, self.width, index)
             if self.sub_menu:
-                self.sub_menu.draw(screen)
+                self.sub_menu.draw(GR)

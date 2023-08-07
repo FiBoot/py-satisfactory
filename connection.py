@@ -2,22 +2,6 @@ import pygame
 import utils
 from enums import EScreen, EColor, EOrientation, EConnection, EConnectionLet, EConnectionType
 
-
-def rect_by_orientation(pos, orientation, size):
-   match orientation:
-       case EOrientation.NORTH:
-           pos = (pos[0], pos[1] + size // 2)
-           size = (size, size // 2)
-       case EOrientation.EAST:
-           size = (size // 2, size)
-       case EOrientation.SOUTH:
-           size = (size, size // 2)
-       case EOrientation.WEST:
-           pos = (pos[0] + size // 2, pos[1])
-           size = (size // 2, size)
-   return pygame.Rect(pos, size)
-
-
 class Connection:
     def __init__(self, build, pos, orientation = EOrientation.NORTH, let = EConnectionLet.OUTLET, type = EConnectionType.BELT):
         self.build = build
@@ -57,30 +41,44 @@ class Connection:
             connection.connected_to = self
             # start diggin
             self.build.find_start()
+    
+    def rect_by_orientation(self, pos, orientation, size):
+        match orientation:
+            case EOrientation.NORTH:
+                pos = (pos[0], pos[1] + size // 2)
+                size = (size, size // 2)
+            case EOrientation.EAST:
+                size = (size // 2, size)
+            case EOrientation.SOUTH:
+                size = (size, size // 2)
+            case EOrientation.WEST:
+                pos = (pos[0] + size // 2, pos[1])
+                size = (size // 2, size)
+        return pygame.Rect(pos, size)
 
-    def draw(self, screen, font, build_pos):
+    def draw(self, GR, build_pos):
         color = EColor.OUTLET if self.let == EConnectionLet.OUTLET else EColor.INLET
         start_pos = utils.add_pair(self.start_pos, build_pos)
-        rect = rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
+        rect = self.rect_by_orientation(start_pos, self.orientation, EConnection.SIZE)
         match self.type:
             case EConnectionType.BELT:
-                pygame.draw.rect(screen, color, rect)
+                pygame.draw.rect(GR.screen, color, rect)
             case EConnectionType.PIPE:
                 match self.orientation:
                     case EOrientation.NORTH:
-                        pygame.draw.rect(screen, color, rect, border_bottom_left_radius=EConnection.SIZE, border_bottom_right_radius=EConnection.SIZE)
+                        pygame.draw.rect(GR.screen, color, rect, border_bottom_left_radius=EConnection.SIZE, border_bottom_right_radius=EConnection.SIZE)
                     case EOrientation.EAST:
-                        pygame.draw.rect(screen, color, rect, border_top_left_radius=EConnection.SIZE, border_bottom_left_radius=EConnection.SIZE)
+                        pygame.draw.rect(GR.screen, color, rect, border_top_left_radius=EConnection.SIZE, border_bottom_left_radius=EConnection.SIZE)
                     case EOrientation.SOUTH:
-                        pygame.draw.rect(screen, color, rect, border_top_left_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
+                        pygame.draw.rect(GR.screen, color, rect, border_top_left_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
                     case EOrientation.WEST:
-                        pygame.draw.rect(screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
+                        pygame.draw.rect(GR.screen, color, rect, border_bottom_right_radius=EConnection.SIZE, border_top_right_radius=EConnection.SIZE)
         # center
         center_pos = utils.add_pair(self.pos, build_pos)
-        pygame.draw.circle(screen, 'purple', center_pos, 2)
+        pygame.draw.circle(GR.screen, 'purple', center_pos, 2)
         # output text
         if self.component and self.let == EConnectionLet.OUTLET:
-            text = font.render(f'{round(self.component.quantity * self.build.ratio, 2)}', True, EColor.FLOATING_TEXT)
+            text = GR.font.render(f'{round(self.component.quantity * self.build.ratio, 2)}', True, EColor.FLOATING_TEXT)
             match self.orientation:
                 case EOrientation.NORTH:
                     text_pos = (center_pos[0] - EScreen.PADDING // 2, center_pos[1] - EScreen.FONT_SIZE)
@@ -90,7 +88,7 @@ class Connection:
                     text_pos = (center_pos[0] - EScreen.PADDING // 2, center_pos[1] + EScreen.FONT_SIZE // 2)
                 case EOrientation.WEST:
                     text_pos = (center_pos[0] - EScreen.FONT_SIZE, center_pos[1] - EScreen.PADDING // 2)
-            screen.blit(text, text_pos)
+            GR.screen.blit(text, text_pos)
 
     def collide(self, rel):
         return rel[0] > self.start_pos[0] and rel[0] < self.start_pos[0] + EConnection.SIZE and rel[1] > self.start_pos[1] and rel[1] < self.start_pos[1] + EConnection.SIZE

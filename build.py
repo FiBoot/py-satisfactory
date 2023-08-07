@@ -1,14 +1,6 @@
 import pygame
 import utils
-from icon import get_icon
-from enums import EScreen, EColor, EContextMenu, EOrientation, EConnection, EConnectionLet
-
-def align_pos_on_grid(pos, shift):
-    gap = (pos[0] % EScreen.CELL_SIZE, pos[1] % EScreen.CELL_SIZE)
-    return (
-        pos[0] + shift[0] + (EScreen.CELL_SIZE - gap[0] if gap[0] > EScreen.CELL_SIZE // 2 else -gap[0]),
-        pos[1] + shift[1] + (EScreen.CELL_SIZE - gap[1] if gap[1] > EScreen.CELL_SIZE // 2 else -gap[1]),
-    )
+from enums import EScreen, EColor, EOrientation, EConnection, EConnectionLet
 
 class Build:
     def __init__(self, type, size, pos, connections = [], shift = (0, 0)):
@@ -43,9 +35,16 @@ class Build:
             connection.build = build
         return build
 
+    def align_pos_on_grid(self, pos, shift):
+        gap = (pos[0] % EScreen.CELL_SIZE, pos[1] % EScreen.CELL_SIZE)
+        return (
+            pos[0] + shift[0] + (EScreen.CELL_SIZE - gap[0] if gap[0] > EScreen.CELL_SIZE // 2 else -gap[0]),
+            pos[1] + shift[1] + (EScreen.CELL_SIZE - gap[1] if gap[1] > EScreen.CELL_SIZE // 2 else -gap[1]),
+        )
+
     def move(self, rel):
         self.pos = utils.add_pair(self.pos, rel)
-        self.grid_pos = align_pos_on_grid(self.pos, self.shift)
+        self.grid_pos = self.align_pos_on_grid(self.pos, self.shift)
 
     def rotate(self):
         self.size = (self.size[1], self.size[0])
@@ -70,7 +69,7 @@ class Build:
         self.calc_outputs()
         self.find_start()
 
-    def draw_recipe_component(self, screen, font, components):
+    def draw_recipe_component(self, GR, components):
         offsets = [
             EScreen.COMPONENT_WIDTH // 2,
             EScreen.PADDING // 2 + EScreen.COMPONENT_WIDTH,
@@ -83,14 +82,14 @@ class Build:
             x = start_x + index * component_gap
             y = self.grid_pos[1] - EScreen.COMPONENT_WIDTH - EScreen.PADDING // 4 if component.let == EConnectionLet.OUTLET else self.grid_pos[1] + EScreen.PADDING // 4
             # icon
-            icon = get_icon(component.ressource)
-            screen.blit(icon, (x, y))
+            icon = GR.get_icon(component.ressource)
+            GR.screen.blit(icon, (x, y))
             # text
-            text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
+            text = GR.font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
             text_y = y - EScreen.FONT_SIZE + EScreen.PADDING // 2 if component.let == EConnectionLet.OUTLET else y + EScreen.COMPONENT_WIDTH
-            screen.blit(text, (x + EScreen.PADDING // 4, text_y))
+            GR.screen.blit(text, (x + EScreen.PADDING // 4, text_y))
 
-    def draw_ratio(self, screen, font):
+    def draw_ratio(self, GR):
         match self.orientation:
             case EOrientation.NORTH:
                 pos = (self.grid_pos[0] + self.size[0] // 2 + EScreen.PADDING, self.grid_pos[1])
@@ -100,21 +99,21 @@ class Build:
                 pos = (self.grid_pos[0] - (self.size[0] // 2 + EScreen.COMPONENT_WIDTH + EScreen.PADDING), self.grid_pos[1])
             case EOrientation.WEST:
                 pos = (self.grid_pos[0], self.grid_pos[1] - (self.size[1] // 2 + EScreen.COMPONENT_WIDTH // 2 + EScreen.PADDING))
-        text = font.render(f'{round(self.ratio * 100)}%', True, EColor.FLOATING_TEXT)
-        screen.blit(text, pos)
+        text = GR.font.render(f'{round(self.ratio * 100)}%', True, EColor.FLOATING_TEXT)
+        GR.screen.blit(text, pos)
 
-    def draw(self, screen, font):
+    def draw(self, GR):
         # build
         rect = pygame.Rect(self.start_pos[0], self.start_pos[1], self.size[0], self.size[1])
         color = EColor.SELECTED_BUILD if self.selected else EColor.BASE_BUILD
-        pygame.draw.rect(screen, color, rect)
+        pygame.draw.rect(GR.screen, color, rect)
         # draw recipe components
         if self.recipe:
-            self.draw_recipe_component(screen, font, self.recipe.outputs)
-            self.draw_recipe_component(screen, font, self.recipe.inputs)
+            self.draw_recipe_component(GR, self.recipe.outputs)
+            self.draw_recipe_component(GR, self.recipe.inputs)
         # connections
         for connection in self.connections:
-            connection.draw(screen, font, self.grid_pos)
+            connection.draw(GR, self.grid_pos)
         # center
         # pygame.draw.circle(screen, 'red', self.grid_pos, 2)
 

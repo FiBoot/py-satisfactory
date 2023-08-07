@@ -1,5 +1,4 @@
 import utils
-from icon import get_icon
 from enums import EScreen, EColor, EContextMenu
 from connection import EConnectionLet, EConnectionType
 
@@ -23,19 +22,19 @@ class Recipe:
         self.inputs = inputs
         self.outputs = outputs
 
-    def draw_component(self, screen, font, pos, component):
+    def draw_component(self, GR, pos, component):
         # icon
-        icon = get_icon(component.ressource)
-        screen.blit(icon, (pos[0], pos[1] + EScreen.PADDING // 2))
+        icon = GR.get_icon(component.ressource)
+        GR.screen.blit(icon, (pos[0], pos[1] + EScreen.PADDING // 2))
         # text
-        text = font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
-        screen.blit(text, (pos[0] + EScreen.COMPONENT_WIDTH + EScreen.PADDING // 2, pos[1] + EScreen.PADDING))
+        text = GR.font.render(f'{component.quantity}', True, EColor.OUTLET if component.let == EConnectionLet.OUTLET else EColor.INLET)
+        GR.screen.blit(text, (pos[0] + EScreen.COMPONENT_WIDTH + EScreen.PADDING // 2, pos[1] + EScreen.PADDING))
         # return next pos
         return (pos[0] - (EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING), pos[1])
 
-    def draw(self, screen, font, pos, width, index):
+    def draw(self, GR, pos, width, index):
         pos = utils.add_pair(pos, (width - (EScreen.COMPONENT_WIDTH * 2 + EScreen.PADDING * 2), EContextMenu.HEIGHT * index))
         for (index, component) in enumerate(self.outputs):
-            pos = self.draw_component(screen, font, pos, component)
+            pos = self.draw_component(GR, pos, component)
         for (index, component) in enumerate(self.inputs):
-            pos = self.draw_component(screen, font, pos, component)
+            pos = self.draw_component(GR, pos, component)
